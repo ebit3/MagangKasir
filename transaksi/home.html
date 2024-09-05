@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard Kasir</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="../assets/dist/css/index.css">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    </head>
+
+    <body>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../index.html">Muji Perkasa</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../index.html">Beranda</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../produk/home.html">Produk</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../kategori/home.html">Kategori</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="home.html" aria-current="page">Transaksi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Laporan</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container mt-5">
+            <div class="row text-center">
+                <h1>Transaksi</h1>
+            </div>
+
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-12 col-lg-12 mb-4">
+                    <form action="" method="post">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row align-items-end">
+                                    <!-- Input Produk -->
+                                    <div class="col-md-5">
+                                        <div class="mb-3">
+                                            <label for="produk" class="form-label">Nama Produk</label>
+                                            <select name="produk" id="produk" class="form-select">
+                                                <option selected>Pilih Produk...</option>
+                                                <option value="1">Produk 1</option>
+                                                <option value="2">Produk 2</option>
+                                                <option value="3">Produk 3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Input Quantity -->
+                                    <div class="col-md-5">
+                                        <div class="mb-3">
+                                            <label for="qty" class="form-label">Jumlah Barang</label>
+                                            <input type="number" name="qty" id="qty" class="form-control" required
+                                                placeholder="Masukkan jumlah barang">
+                                        </div>
+                                    </div>
+
+                                    <!-- Tombol Submit -->
+                                    <div class="col-md-2">
+                                        <div class="mb-3">
+                                            <button class="btn btn-primary fw-semibold w-100" type="submit"
+                                                name="submit">
+                                                <i class="bi bi-bag-fill me-2"></i>
+                                                Tambah
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Cart Table -->
+                <div class="col-md-7 col-lg-7 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary p-3 text-white">
+                            Keranjang Belanja
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table caption-top align-middle">
+                                    <caption class="text-start fw-bold">Keranjang Belanja Anda</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Barang</th>
+                                            <th scope="col">Harga</th>
+                                            <th scope="col">Jumlah</th>
+                                            <th scope="col">Subtotal</th>
+                                            <th scope="col">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Produk 2</td>
+                                            <td>Rp 3.000</td>
+                                            <td>3</td>
+                                            <td>Rp 9.000</td>
+                                            <td>
+                                                <a href="remove_item.php?id=2" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Produk 1</td>
+                                            <td>Rp 9.000</td>
+                                            <td>10</td>
+                                            <td>Rp 90.000</td>
+                                            <td>
+                                                <a href="remove_item.php?id=1" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Produk 3</td>
+                                            <td>Rp 2.000</td>
+                                            <td>1</td>
+                                            <td>Rp 2.000</td>
+                                            <td>
+                                                <a href="remove_item.php?id=3" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3" class="text-end fw-bold">Total</td>
+                                            <td colspan="2" class="fw-bold">Rp 101.000</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detail Belanja -->
+                <div class="col-md-5 col-lg-5 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary p-3 text-white">
+                            Detail Belanja
+                        </div>
+                        <div class="card-body">
+                            <!-- Kode Belanja -->
+                            <div class="mb-3">
+                                <label for="kodeBelanja" class="form-label">Kode Belanja</label>
+                                <input type="text" name="kode" id="kodeBelanja" class="form-control" value="xysjsm"
+                                    disabled>
+                            </div>
+
+                            <!-- Tanggal Belanja -->
+                            <div class="mb-3">
+                                <label for="tglBelanja" class="form-label">Tanggal Belanja</label>
+                                <input type="date" name="tgl" id="tglBelanja" class="form-control" value="2024-09-05"
+                                    disabled>
+                            </div>
+
+                            <!-- Tombol untuk menambah diskon -->
+                            <div class="mb-3">
+                                <button id="btnTambahDiskon" class="btn btn-outline-primary btn-sm">Tambahkan
+                                    Diskon</button>
+                            </div>
+
+                            <!-- Input Form Diskon (tersembunyi secara default) -->
+                            <div id="formDiskon" class="mb-3" style="display: none;">
+                                <label for="diskon" class="form-label">Diskon (%)</label>
+                                <input type="number" name="diskon" id="diskon" class="form-control"
+                                    placeholder="Masukkan diskon">
+                            </div>
+
+                            <!-- Total Belanja -->
+                            <div class="mb-3">
+                                <label for="totalBelanja" class="form-label">Total Belanja</label>
+                                <input type="text" name="total" id="totalBelanja" class="form-control" value="101.000"
+                                    disabled>
+                            </div>
+
+                            <!-- Jumlah Uang -->
+                            <div class="mb-3">
+                                <label for="jumlahUang" class="form-label">Jumlah Uang</label>
+                                <input type="text" name="jumlahUang" id="jumlahUang" class="form-control"
+                                    value="110.000">
+                            </div>
+
+                            <!-- Kembalian -->
+                            <div class="mb-3">
+                                <label for="kembalianBelanja" class="form-label">Kembalian Belanja</label>
+                                <input type="text" name="kembalian" id="kembalianBelanja" class="form-control"
+                                    value="9.000" disabled>
+                            </div>
+
+                            <!-- Tombol Selesai Belanja -->
+                            <div class="d-grid">
+                                <button class="btn btn-primary">Selesai Belanja</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 Muji Perkasa. All Rights Reserved.</p>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+            // JavaScript untuk menampilkan form diskon saat tombol diklik
+            document.getElementById('btnTambahDiskon').addEventListener('click', function () {
+                var formDiskon = document.getElementById('formDiskon');
+                if (formDiskon.style.display === 'none') {
+                    formDiskon.style.display = 'block';
+                } else {
+                    formDiskon.style.display = 'none';
+                }
+            });
+        </script>
+
+    </body>
+
+</html>
