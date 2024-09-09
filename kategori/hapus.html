@@ -34,7 +34,7 @@
                             <a class="nav-link active" aria-current="page" href="home.html">Kategori</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Transaksi</a>
+                            <a class="nav-link" href="../transaksi/home.html">Transaksi</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Laporan</a>
@@ -47,39 +47,26 @@
         <!-- Main Content -->
         <div class="container mt-5">
             <div class="row text-center">
-                <h1>Tambah Kategori</h1>
+                <h1>Data Kategori</h1>
             </div>
 
             <div class="row mt-4 justify-content-center">
                 <!-- Kategori Table -->
                 <div class="col-md-12 col-lg-12 mb-4">
-                    <form method="post" id="categorieForm">
-                        <div class="card">
-                            <div class="card-header bg-info p-3"></div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label for="kategori" class="form-label">Kategori</label>
-                                    <input type="text" name="kategori" id="kategori" class="form-control shadow-none"
-                                        placeholder="Masukkan Kategori" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="status" class="form-label">Status Kategori</label>
-                                    <select name="status" id="status" class="form-select">
-                                        <option selected></option>
-                                        <option value="Aktif">Aktif</option>
-                                        <option value="Tidak aktif">Tidak Aktif</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="card-footer p-3 bg-white">
-                                <a href="home.html" class="btn btn-danger">Kembali</a>
-                                <button class="btn btn-primary" type="submit" name="simpan" id="submit">Simpan</button>
-                            </div>
+                    <div class="card">
+                        <div class="card-header bg-info p-3"></div>
+                        <div class="card-body">
+                            <ul id="categorieInfo" class="list-group list-group-numbered">
+                                <!-- Data produk akan ditampilkan di sini -->
+                            </ul>
                         </div>
-                    </form>
+                        <div class="card-footer">
+                            <button id="deleteBtn" class="btn btn-danger">Hapus</button>
+                            <a href="home.html" class="btn btn-secondary">Kembali</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
 
         <!-- Footer -->
@@ -93,7 +80,7 @@
 
             // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-            import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+            import { getDatabase, ref, get, remove } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
 
             const firebaseConfig = {
                 apiKey: "AIzaSyBatww_KyYImYVgZNRfgkBnagqQcNYA-yA",
@@ -110,22 +97,35 @@
             const app = initializeApp(firebaseConfig);
             const database = getDatabase(app);
 
-            document.getElementById('categorieForm').addEventListener('submit', function (e) {
-                e.preventDefault();
+            const urlParams = new URLSearchParams(window.location.search);
+            const categorieId = urlParams.get('id');
 
-                const categorie = document.getElementById('kategori').value;
-                const status = document.getElementById('status').value;
+            const categorieRef = ref(database, 'categories/' + categorieId);
 
-                const categorieRef = ref(database, 'categories');
-                push(categorieRef, {
-                    kategori: categorie,
-                    status: status,
-                }).then(() => {
-                    alert('Kategori berhasil ditambahkan!');
+            get(categorieRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const product = snapshot.val();
+                    document.getElementById('categorieInfo').innerHTML = `
+                    <li class="list-group-item border border-0"><strong>Nama Kategori:</strong> ${product.kategori}</li>                    
+                    <li class="list-group-item border-0"><strong>Status Kategori:</strong> ${product.status}</li>                    
+                `;
+                } else {
+                    alert('Kategori tidak ditemukan!');
                     window.location.href = 'home.html';
-                }).catch((error) => {
-                    console.error('Error:', error);
-                });
+                }
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
+
+            document.getElementById('deleteBtn').addEventListener('click', function () {
+                if (confirm('Apakah Anda yakin ingin menghapus Kategori ini?')) {
+                    remove(categorieRef).then(() => {
+                        alert('Kategori berhasil dihapus!');
+                        window.location.href = 'home.html';
+                    }).catch((error) => {
+                        console.error('Error:', error);
+                    });
+                }
             });
 
         </script>

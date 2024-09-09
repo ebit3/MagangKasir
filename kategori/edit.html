@@ -53,21 +53,21 @@
             <div class="row mt-4 justify-content-center">
                 <!-- Kategori Table -->
                 <div class="col-md-12 col-lg-12 mb-4">
-                    <form action="" method="post">
+                    <form action="" method="post" id="categorieForm">
                         <div class="card">
                             <div class="card-header bg-warning p-3"></div>
                             <div class="card-body">
                                 <div class="mb-3">
                                     <label for="kategori" class="form-label">Kategori</label>
                                     <input type="text" name="kategori" id="kategori" class="form-control shadow-none"
-                                        placeholder="Masukkan Kategori" required value="kategori 1">
+                                        placeholder="Masukkan Kategori" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="status" class="form-label">Status Kategori</label>
                                     <select name="status" id="status" class="form-select">
-                                        <option selected>Aktif</option>
-                                        <option value="">Aktif</option>
-                                        <option value="">Tidak Aktif</option>
+                                        <option selected></option>
+                                        <option value="Aktif">Aktif</option>
+                                        <option value="Tidak aktif">Tidak Aktif</option>
                                     </select>
                                 </div>
                             </div>
@@ -88,6 +88,66 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
+        <script type="module">
+
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+            import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyBatww_KyYImYVgZNRfgkBnagqQcNYA-yA",
+                authDomain: "dbkasir-f7cc3.firebaseapp.com",
+                databaseURL: "https://dbkasir-f7cc3-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "dbkasir-f7cc3",
+                storageBucket: "dbkasir-f7cc3.appspot.com",
+                messagingSenderId: "179332456815",
+                appId: "1:179332456815:web:ae2620d7f651b1519e489a",
+                measurementId: "G-MC9Q4FC6J7"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const categorieId = urlParams.get('id');
+
+            const categorieRef = ref(database, 'categories/' + categorieId);
+
+            get(categorieRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const categorie = snapshot.val();
+                    document.getElementById('kategori').value = categorie.kategori;
+                    document.getElementById('status').value = categorie.status;
+                } else {
+                    alert('Kategori tidak ditemukan!');
+                    window.location.href = 'home.html';
+                }
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
+
+            document.getElementById('categorieForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const categorie = document.getElementById('kategori').value;
+                const status = document.getElementById('status').value;
+
+                update(categorieRef, {
+
+                    kategori: categorie,
+                    status: status,
+                }).then(() => {
+
+                    alert('Kategori berhasil diperbarui!');
+                    window.location.href = 'home.html';
+                }).catch((error) => {
+
+                    console.error('Error:', error);
+                });
+            });
+
+        </script>
 
     </body>
 
