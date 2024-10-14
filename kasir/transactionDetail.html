@@ -7,6 +7,7 @@
         <title>Detail Transaksi</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
         <style>
             body {
                 background-color: #f8f9fa;
@@ -114,6 +115,7 @@
         </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
         <script>
             // Ambil data transaksi dari localStorage
@@ -214,33 +216,58 @@
                 return `${day}/${month}/${year}`; // Mengembalikan dalam format DD/MM/YYYY
             }
 
-            // Fungsi untuk share via WhatsApp
-            document.getElementById('btnShare').addEventListener('click', () => {
+            document.getElementById('btnCetak').addEventListener('click', () => {
+                const { jsPDF } = window.jspdf; // Mengakses jsPDF
+                const doc = new jsPDF();
+
                 const transactionData = JSON.parse(localStorage.getItem('lastTransaction'));
 
                 if (transactionData) {
-                    // Buat pesan yang akan dikirim via WhatsApp
-                    const message = `
-            *Detail Transaksi:*
-            - Kode Belanja: ${transactionData.kodeBelanja}
-            - Tanggal: ${formatTanggal(transactionData.tglBelanja)}
-            - Total Belanja: ${formatCurrency(transactionData.totalAmount)}
-            - Diskon: ${transactionData.diskon}%
-            - Bayar: ${formatCurrency(transactionData.jumlahUang)}
-            - Kembalian: ${formatCurrency(transactionData.kembalianBelanja)}
-            *Item yang Dibeli:*
-            ${transactionData.cartItems.map(item => `- ${item.produk} (${item.qty}x) - ${formatCurrency(item.harga * item.qty)}`).join('\n')}
-        `;
+                    // Menyiapkan konten untuk PDF
+                    let content = `Detail Transaksi:\n`;
+                    content += `Kode Belanja: ${transactionData.kodeBelanja}\n`;
+                    content += `Tanggal: ${formatTanggal(transactionData.tglBelanja)}\n`;
+                    content += `Total Belanja: ${formatCurrency(transactionData.totalAmount)}\n`;
+                    content += `Diskon: ${transactionData.diskon}%\n`;
+                    content += `Bayar: ${formatCurrency(transactionData.jumlahUang)}\n`;
+                    content += `Kembalian: ${formatCurrency(transactionData.kembalianBelanja)}\n`;
+                    content += `Item yang Dibeli:\n`;
 
-                    // URL WhatsApp dengan pesan yang sudah dirangkai
-                    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+                    transactionData.cartItems.forEach(item => {
+                        content += `- ${item.produk} (${item.qty}x) - ${formatCurrency(item.harga * item.qty)}\n`;
+                    });
 
-                    // Buka URL WhatsApp di tab baru atau di aplikasi
-                    window.open(whatsappUrl, '_blank');
+                    // Menambahkan konten ke PDF
+                    doc.text(content, 10, 10);
+                    const pdfOutput = doc.output('blob');
+
+                    // Meng-upload PDF ke server atau layanan penyimpanan
+                    const formData = new FormData();
+                    formData.append('file', pdfOutput, 'transaksi.pdf');
+
+                    // Contoh pengiriman ke server menggunakan fetch (pastikan ada endpoint di servermu)
+                    fetch('YOUR_SERVER_UPLOAD_URL', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Dapatkan URL file PDF setelah berhasil di-upload
+                            const pdfUrl = data.fileUrl; // Misal endpoint mengembalikan URL file
+
+                            // Buat URL WhatsApp dengan link PDF
+                            const whatsappUrl = `https://api.whatsapp.com/send?text=Silakan lihat detail transaksi berikut: ${encodeURIComponent(pdfUrl)}`;
+                            window.open(whatsappUrl, '_blank');
+                        })
+                        .catch(error => {
+                            console.error('Error uploading PDF:', error);
+                        });
+
                 } else {
                     alert('Tidak ada data transaksi.');
                 }
             });
+
 
         </script>
 
