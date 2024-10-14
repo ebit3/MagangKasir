@@ -11,12 +11,47 @@
         <style>
             body {
                 background-color: #f8f9fa;
-                padding: 20px;
+                padding: 10px;
             }
 
             @media print {
                 .no-print button {
                     display: none;
+                    /* Sembunyikan tombol saat mencetak */
+                }
+
+                #receipt {
+                    width: 100%;
+                    /* Lebar penuh untuk cetak */
+                    max-width: none;
+                    /* Hapus batas lebar */
+                    margin: 0;
+                    /* Hapus margin */
+                    padding: 0;
+                    /* Hapus padding */
+                }
+
+                .receipt-container {
+                    box-shadow: none;
+                    /* Hapus bayangan saat mencetak */
+                }
+
+                .receipt-header,
+                .receipt-info,
+                .receipt-items {
+                    padding: 5px 0;
+                    /* margin-bottom: 0; */
+                    /* Kurangi padding untuk konten */
+                }
+
+                .receipt-info {
+                    font-size: 12px;
+                    /* Ukuran font yang lebih kecil */
+                }
+
+                .receipt-item .item-details {
+                    font-size: 12px;
+                    /* Ukuran font yang lebih kecil untuk item */
                 }
             }
 
@@ -24,8 +59,8 @@
                 background-color: white;
                 padding: 20px;
                 border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                max-width: 300px;
+                /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+                max-width: 500px;
                 margin: 0 auto;
             }
 
@@ -37,13 +72,10 @@
             .receipt-info {
                 display: flex;
                 justify-content: space-between;
-                border-bottom: 1px dashed #000000;
                 padding: 10px 0;
             }
 
             .receipt-items {
-                border-top: 1px dashed #000000;
-                border-bottom: 1px dashed #000000;
                 margin: 10px 0;
                 padding: 10px 0;
             }
@@ -73,9 +105,14 @@
             }
 
             .receipt-item .item-price {
-                text-align: right;
+                /* text-align: right; */
                 color: #666;
                 font-size: 14px;
+            }
+
+            hr {
+                border: 1px dashed #000;
+                margin: 10px 0;
             }
         </style>
     </head>
@@ -84,14 +121,19 @@
         <div class="receipt-container" id="receipt">
             <div class="receipt-header">
                 <h4 class="fw-bold">CV Muji Perkasa</h4>
-                <p>Bandar Tandon & Filter Air, Jalan Ngaglik Baitul Makmur 6, Margelo Ngaglik, Kranggan, Mojokerto, Jawa
-                    Timur</p>
+                <p>Bandar Tandon & Filter Air</p>
+                <p>Jalan Ngaglik Baitul Makmur 6, Margelo Ngaglik, Kranggan, Mojokerto, Jawa Timur</p>
+                <p><strong>Tel: (123) 456-7890</strong></p>
                 <p><strong>Detail Transaksi</strong></p>
             </div>
+
+            <hr>
 
             <div id="transactionDetail">
                 <!-- Detail transaksi akan dimuat di sini -->
             </div>
+
+            <hr>
 
             <div class="receipt-header">
                 <p><strong>Barang yang sudah dibeli tidak dapat dikembalikan lagi</strong></p>
@@ -107,9 +149,6 @@
                 </button>
                 <button id="btnKembali" class="btn btn-secondary btn-custom">
                     <i class="fas fa-arrow-left"></i> Kembali
-                </button>
-                <button id="btnShare" class="btn btn-info btn-custom">
-                    <i class="fab fa-whatsapp"></i> Share via WhatsApp
                 </button>
             </div>
         </div>
@@ -130,56 +169,75 @@
             if (transactionData) {
                 const transactionDetailElement = document.getElementById('transactionDetail');
 
+                // Calculate subtotal
+                const subtotal = transactionData.cartItems.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+
                 // Menampilkan data transaksi
                 transactionDetailElement.innerHTML = `
-                <div class="receipt-info">
-                    <span><strong>Kode Belanja:</strong></span>
-                    <span>${transactionData.kodeBelanja}</span>
-                </div>
-                <div class="receipt-info">
-                    <span><strong>Tanggal:</strong></span>
-                    <span>${formatTanggal(transactionData.tglBelanja)}</span>
-                </div>
+        <div class="receipt-info">
+            <span><strong>Kode Belanja</strong></span>
+            <span>${transactionData.kodeBelanja}</span>
+        </div>
+        <div class="receipt-info">
+            <span><strong>Tanggal</strong></span>
+            <span>${formatTanggal(transactionData.tglBelanja)}</span>
+        </div>
 
-                <h5 class="text-center">##LUNAS##</h5>
+        <hr>
 
-                <div class="receipt-items">
-                    <h5>Item yang Dibeli:</h5>
-                    ${transactionData.cartItems.map(item => `
-                        <div class="receipt-item">
-                            <div class="item-details">
-                                <span>${item.produk} (${item.qty}x)</span>
-                                <span>${formatCurrency(item.harga * item.qty)}</span>
-                            </div>
-                            <div class="item-price">Harga Satuan: ${formatCurrency(item.harga)}</div>
-                        </div>
-                    `).join('')}
-                </div>
+        <h5 class="text-center">##LUNAS##</h5>
 
-                <div class="receipt-info">
-                    <span><strong>Diskon:</strong></span>
-                    <span>${transactionData.diskon}%</span>
-                </div>
+        <hr>
 
-                <div class="receipt-info">
-                    <span><strong>Total Belanja:</strong></span>
-                    <span>${formatCurrency(transactionData.totalAmount)}</span>
+        <div class="receipt-items">                
+            ${transactionData.cartItems.map(item => `
+                <div class="receipt-item">
+                    <div class="item-details">
+                        <span>${item.produk} (${item.qty}x)</span>
+                        <span>${formatCurrency(item.harga * item.qty)}</span>
+                    </div>
+                    <div class="item-price">${formatCurrency(item.harga)}</div>
                 </div>
+            `).join('')}
+        </div>
 
-                <div class="receipt-info">
-                    <span><strong>Bayar:</strong></span>
-                    <span>${formatCurrency(transactionData.jumlahUang)}</span>
-                </div>
+        <hr>
 
-                <div class="receipt-info">
-                    <span><strong>Kembalian:</strong></span>
-                    <span>${formatCurrency(transactionData.kembalianBelanja)}</span>
-                </div>
-            `;
+        <div class="receipt-info">
+            <span><strong>Subtotal:</strong></span>
+            <span>${formatCurrency(subtotal)}</span>
+        </div>
+
+        
+        <hr>
+
+        <div class="receipt-info">
+            <span><strong>Diskon:</strong></span>
+            <span>${transactionData.diskon}%</span>
+        </div>
+
+        <hr>
+
+        <div class="receipt-info">
+            <span><strong>Total Belanja:</strong></span>
+            <span>${formatCurrency(transactionData.totalAmount)}</span>
+        </div>
+
+        <hr>
+
+        <div class="receipt-info">
+            <span><strong>Bayar:</strong></span>
+            <span>${formatCurrency(transactionData.jumlahUang)}</span>
+        </div>
+
+        <div class="receipt-info">
+            <span><strong>Kembalian:</strong></span>
+            <span>${formatCurrency(transactionData.kembalianBelanja)}</span>
+        </div>
+    `;
             } else {
                 document.getElementById('transactionDetail').innerHTML = 'Tidak ada data transaksi.';
             }
-
             // Fungsi untuk mencetak PDF
             document.getElementById('btnCetak').addEventListener('click', () => {
                 const element = document.getElementById('receipt'); // Ambil elemen receipt
@@ -213,65 +271,9 @@
                 const day = String(date.getDate()).padStart(2, '0'); // Mendapatkan tanggal dan menambahkan 0 di depan jika < 10
                 const month = String(date.getMonth() + 1).padStart(2, '0'); // Mendapatkan bulan (0-indexed, jadi tambahkan 1)
                 const year = date.getFullYear(); // Mendapatkan tahun
-                return `${day}/${month}/${year}`; // Mengembalikan dalam format DD/MM/YYYY
+                return `${day}-${month}-${year}`; // Format tanggal dd-mm-yyyy
             }
-
-            document.getElementById('btnCetak').addEventListener('click', () => {
-                const { jsPDF } = window.jspdf; // Mengakses jsPDF
-                const doc = new jsPDF();
-
-                const transactionData = JSON.parse(localStorage.getItem('lastTransaction'));
-
-                if (transactionData) {
-                    // Menyiapkan konten untuk PDF
-                    let content = `Detail Transaksi:\n`;
-                    content += `Kode Belanja: ${transactionData.kodeBelanja}\n`;
-                    content += `Tanggal: ${formatTanggal(transactionData.tglBelanja)}\n`;
-                    content += `Total Belanja: ${formatCurrency(transactionData.totalAmount)}\n`;
-                    content += `Diskon: ${transactionData.diskon}%\n`;
-                    content += `Bayar: ${formatCurrency(transactionData.jumlahUang)}\n`;
-                    content += `Kembalian: ${formatCurrency(transactionData.kembalianBelanja)}\n`;
-                    content += `Item yang Dibeli:\n`;
-
-                    transactionData.cartItems.forEach(item => {
-                        content += `- ${item.produk} (${item.qty}x) - ${formatCurrency(item.harga * item.qty)}\n`;
-                    });
-
-                    // Menambahkan konten ke PDF
-                    doc.text(content, 10, 10);
-                    const pdfOutput = doc.output('blob');
-
-                    // Meng-upload PDF ke server atau layanan penyimpanan
-                    const formData = new FormData();
-                    formData.append('file', pdfOutput, 'transaksi.pdf');
-
-                    // Contoh pengiriman ke server menggunakan fetch (pastikan ada endpoint di servermu)
-                    fetch('YOUR_SERVER_UPLOAD_URL', {
-                        method: 'POST',
-                        body: formData
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            // Dapatkan URL file PDF setelah berhasil di-upload
-                            const pdfUrl = data.fileUrl; // Misal endpoint mengembalikan URL file
-
-                            // Buat URL WhatsApp dengan link PDF
-                            const whatsappUrl = `https://api.whatsapp.com/send?text=Silakan lihat detail transaksi berikut: ${encodeURIComponent(pdfUrl)}`;
-                            window.open(whatsappUrl, '_blank');
-                        })
-                        .catch(error => {
-                            console.error('Error uploading PDF:', error);
-                        });
-
-                } else {
-                    alert('Tidak ada data transaksi.');
-                }
-            });
-
-
         </script>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 
 </html>
