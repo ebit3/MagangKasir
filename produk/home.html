@@ -28,18 +28,27 @@
                             <a class="nav-link" href="../index.html">Beranda</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="../user/home.html">Pengguna</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="home.html">Produk</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../kategori/home.html">Kategori</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../transaksi/home.html">Transaksi</a>
+                            <a class="nav-link" href="#">Transaksi</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Laporan</a>
                         </li>
                     </ul>
+                    <form class="d-flex" role="search">
+                        <!-- Tombol Logout -->
+                        <button id="logoutBtn" class="btn btn-danger btn-sm">
+                            <i class="bi bi-arrow-right-square"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -65,7 +74,14 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table caption-top">
-                                    <caption>List Data Produk</caption>
+                                    <caption>
+                                        <span class="ms-3">
+                                            <button id="deleteBtn" class="btn btn-danger btn-sm">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </span>
+                                        Hapus Semua Produk
+                                    </caption>
                                     <thead>
                                         <tr>
                                             <th scope="col">Produk</th>
@@ -75,27 +91,30 @@
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Produk 1</td>
-                                            <td>Rp 2.000</td>
-                                            <td>Kategori 1</td>
-                                            <td>
-                                                <span class="badge text-bg-info">Aktif</span>
-                                            </td>
-                                            <td>
-                                                <a href="" class="btn btn-sm btn-danger">
-                                                    <i class="bi bi-trash"></i>
-                                                </a>
-                                                |
-                                                <a href="edit.html" class="btn btn-sm btn-warning">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
+                                    <tbody id="tableProductBody">
+
                                     </tbody>
                                 </table>
                             </div>
+
+                            <!-- Template for product row -->
+                            <template id="product-template">
+                                <tr>
+                                    <td class="row-product"></td>
+                                    <td class="row-price"></td>
+                                    <td class="row-categorie"></td>
+                                    <td class="row-status"></td>
+                                    <td>
+                                        <a href="hapus.html" class="btn btn-sm btn-danger delete-link">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                        |
+                                        <a href="edit.html" class="btn btn-sm btn-warning edit-link">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -109,6 +128,121 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
+        <script type="module">
+
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+            import { getDatabase, ref, onValue, orderByChild, query, get, remove } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyBatww_KyYImYVgZNRfgkBnagqQcNYA-yA",
+                authDomain: "dbkasir-f7cc3.firebaseapp.com",
+                databaseURL: "https://dbkasir-f7cc3-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "dbkasir-f7cc3",
+                storageBucket: "dbkasir-f7cc3.appspot.com",
+                messagingSenderId: "179332456815",
+                appId: "1:179332456815:web:ae2620d7f651b1519e489a",
+                measurementId: "G-MC9Q4FC6J7"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+
+            const tableProductBody = document.getElementById('tableProductBody');
+            const template = document.getElementById('product-template').content;
+
+            function loadData() {
+                // Gunakan orderByChild untuk mengurutkan data berdasarkan abjad (produk)
+                const productRef = query(ref(database, 'products'), orderByChild('produk'));
+
+                onValue(productRef, (snapshot) => {
+                    tableProductBody.innerHTML = ''; // Bersihkan data yang ada
+
+                    if (!snapshot.exists()) {
+                        // Jika tidak ada data yang tersedia
+                        tableProductBody.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada produk yang tersedia</td></tr>';
+                        return;
+                    }
+
+                    snapshot.forEach((childSnapshot) => {
+                        const product = childSnapshot.val();
+                        const clone = document.importNode(template, true);
+
+                        // Validasi data produk, pastikan semua data yang dibutuhkan ada
+                        const productName = product.produk || 'Nama produk tidak tersedia';
+                        const productPrice = product.harga || 'Harga tidak tersedia';
+                        const productCategory = product.kategori || 'Kategori tidak tersedia';
+                        const productStatus = product.status || 'Status tidak tersedia';
+
+                        // Isi template dengan data produk
+                        clone.querySelector('.row-product').textContent = productName;
+                        clone.querySelector('.row-price').textContent = productPrice;
+                        clone.querySelector('.row-categorie').textContent = productCategory;
+
+                        // Kondisi untuk menentukan status dan class badge
+                        const statusElement = clone.querySelector('.row-status');
+                        if (productStatus === 'Ada') {
+                            statusElement.innerHTML = '<span class="badge rounded-pill text-bg-primary px-3">Ada</span>';
+                        } else if (productStatus === 'Kosong') {
+                            statusElement.innerHTML = '<span class="badge rounded-pill text-bg-danger px-3">Kosong</span>';
+                        } else {
+                            statusElement.innerHTML = `<span class="badge rounded-pill text-bg-secondary px-3">${productStatus}</span>`;
+                        }
+
+                        // Tambahkan event untuk edit dan delete link
+                        clone.querySelector('.edit-link').href = `edit.html?id=${childSnapshot.key}`;
+                        clone.querySelector('.delete-link').href = `hapus.html?id=${childSnapshot.key}`;
+
+                        // Tambahkan baris yang sudah diisi ke dalam table body
+                        tableProductBody.appendChild(clone);
+                    });
+                });
+            }
+
+
+            // Panggil fungsi loadData untuk menampilkan produk
+            loadData();
+
+            // delete all
+            const productRef = ref(database, 'products');
+
+            document.getElementById('deleteBtn').addEventListener('click', function () {
+                if (confirm('Apakah Anda yakin ingin menghapus semua Produk ini?')) {
+                    remove(productRef).then(() => {
+                        alert('Produk berhasil dihapus!');
+                        window.location.href = 'home.html';
+                    }).catch((error) => {
+                        console.error('Error:', error);
+                    });
+                }
+            });
+
+
+            // Handle logout
+            document.getElementById('logoutBtn').addEventListener('click', function () {
+                // Hapus informasi pengguna dari localStorage
+                localStorage.removeItem('loggedInUser');
+
+                // Redirect ke halaman login
+                window.location.href = '../auth/login.html';
+            });
+
+        </script>
+
+        <script>
+            // Mengambil informasi pengguna dari localStorage
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+            // Menampilkan informasi pengguna di halaman index
+            if (loggedInUser) {
+                // document.getElementById('usernameDisplay').innerText = loggedInUser.username;
+                // document.getElementById('emailDisplay').innerText = loggedInUser.email;
+            } else {
+                // Jika pengguna belum login, redirect ke halaman login
+                window.location.href = '../auth/login.html';
+            }
+        </script>
 
     </body>
 

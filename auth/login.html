@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Muji Perkasa - Kasir</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+        <style>
+            body {
+                background-color: #f7f7f7;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+
+            .login-container {
+                background-color: #fff;
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .login-container h3 {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="login-container">
+            <h3>Login</h3>
+            <form id="formLogin">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" placeholder="Enter username">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter password">
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                <p class="text-center text-muted">Belum punya akun?
+                    <a href="register.html" class="text-decoration-none">Register</a>
+                </p>
+            </form>
+        </div>
+
+        <!-- Tambahkan library CryptoJS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
+
+        <script type="module">
+            // Import Firebase SDKs
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+            import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+            // import CryptoJS from "https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js";
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyBatww_KyYImYVgZNRfgkBnagqQcNYA-yA",
+                authDomain: "dbkasir-f7cc3.firebaseapp.com",
+                databaseURL: "https://dbkasir-f7cc3-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "dbkasir-f7cc3",
+                storageBucket: "dbkasir-f7cc3.appspot.com",
+                messagingSenderId: "179332456815",
+                appId: "1:179332456815:web:ae2620d7f651b1519e489a",
+                measurementId: "G-MC9Q4FC6J7"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+
+            // Handle login form submission
+            document.getElementById('formLogin').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent form from submitting normally
+
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                // Reference to the specific user's data
+                const dbRef = ref(database);
+                get(child(dbRef, `users/${username}`)).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+
+                        // Hash the input password using the same hash algorithm (SHA-256)
+                        const hashedInputPassword = CryptoJS.SHA256(password).toString();
+
+                        // Compare the hashed password with the one stored in Firebase
+                        if (hashedInputPassword === userData.password) {
+                            alert('Login berhasil!');
+
+                            // Simpan informasi pengguna ke sessionStorage
+                            sessionStorage.setItem('loggedInUser', JSON.stringify({
+                                username: userData.username,
+                                email: userData.email,
+                                role: userData.role
+                            }));
+
+                            // Redirect berdasarkan peran
+                            if (userData.role === 'admin') {
+                                window.location.href = '../index.html';
+                            } else if (userData.role === 'kasir') {
+                                window.location.href = '../kasir/home.html';
+                            } else {
+                                alert('Peran tidak dikenali.');
+                            }
+                        } else {
+                            alert('Password salah!');
+                        }
+                    } else {
+                        alert('Username tidak ditemukan!');
+                    }
+                }).catch((error) => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan. Coba lagi.');
+                });
+            });
+        </script>
+
+
+        <!-- bootstrap -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+            integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+            crossorigin="anonymous"></script>
+    </body>
+
+</html>

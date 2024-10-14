@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard Kasir</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="../assets/dist/css/index.css">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    </head>
+
+    <body>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../index.html">Muji Perkasa</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../index.html">Beranda</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="user/home.html">Pengguna</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../produk/home.html">Produk</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="home.html">Kategori</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../transaksi/home.html">Transaksi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Laporan</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <!-- Tombol Logout -->
+                        <button id="logoutBtn" class="btn btn-danger btn-sm">
+                            <i class="bi bi-arrow-right-square"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container mt-5">
+            <div class="row text-center">
+                <h1>Tambah Pengguna</h1>
+            </div>
+
+            <div class="row mt-4 justify-content-center">
+                <!-- Pengguna Table -->
+                <div class="col-md-12 col-lg-12 mb-4">
+                    <form method="post" id="usersFrom">
+                        <div class="card">
+                            <div class="card-header bg-info p-3"></div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" placeholder="Enter username">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Enter email">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="password" class="form-label">Password</label>
+                                            <input type="password" class="form-control" id="password"
+                                                placeholder="Enter password">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="confirm-password" class="form-label">Confirm Password</label>
+                                            <input type="password" class="form-control" id="confirm-password"
+                                                placeholder="Confirm password">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="role" class="form-label">Level Pengguna</label>
+                                        <select name="role" id="role" class="form-select">
+                                            <option selected></option>
+                                            <option value="kasir">Kasir</option>
+                                            <option value="admin">Admin</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer p-3 bg-white">
+                                <a href="home.html" class="btn btn-danger">Kembali</a>
+                                <button class="btn btn-primary" type="submit" name="simpan" id="submit">Simpan</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 Muji Perkasa. All Rights Reserved.</p>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Tambahkan library CryptoJS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
+
+
+        <script type="module">
+
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+            import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyBatww_KyYImYVgZNRfgkBnagqQcNYA-yA",
+                authDomain: "dbkasir-f7cc3.firebaseapp.com",
+                databaseURL: "https://dbkasir-f7cc3-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "dbkasir-f7cc3",
+                storageBucket: "dbkasir-f7cc3.appspot.com",
+                messagingSenderId: "179332456815",
+                appId: "1:179332456815:web:ae2620d7f651b1519e489a",
+                measurementId: "G-MC9Q4FC6J7"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+
+            // Handle form submit
+            document.getElementById('usersFrom').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent form from submitting normally
+
+                const username = document.getElementById('username').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const role = document.getElementById('role').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+
+                // Check if password matches
+                if (password !== confirmPassword) {
+                    alert('Password dan konfirmasi password tidak cocok.');
+                    return;
+                }
+
+                // Validate inputs (optional: you can add more validation if needed)
+                if (username === '' || email === '' || password === '') {
+                    alert('Semua kolom wajib diisi.');
+                    return;
+                }
+
+                // Hash the password using CryptoJS
+                const hashedPassword = CryptoJS.SHA256(password).toString();
+
+                // Save user data to Firebase Realtime Database with hashed password
+                const userRef = ref(database, 'users/' + username); // Save user data under 'users/{username}'
+                set(userRef, {
+                    username: username,
+                    email: email,
+                    role: role,
+                    password: hashedPassword // Save the hashed password
+                })
+                    .then(() => {
+                        alert('Pengguna baru berhasil ditambahkan!');
+                        // Redirect to login page or perform any other action
+                        window.location.href = 'home.html';
+                    })
+                    .catch((error) => {
+                        console.error('Gagal menyimpan data:', error);
+                        alert('Terjadi kesalahan. Coba lagi.');
+                    });
+            });
+
+        </script>
+
+    </body>
+
+</html>

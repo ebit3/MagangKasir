@@ -28,6 +28,9 @@
                             <a class="nav-link" href="../index.html">Beranda</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="../user/home.html">Pengguna</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="home.html">Produk</a>
                         </li>
                         <li class="nav-item">
@@ -40,6 +43,12 @@
                             <a class="nav-link" href="#">Laporan</a>
                         </li>
                     </ul>
+                    <form class="d-flex" role="search">
+                        <!-- Tombol Logout -->
+                        <button id="logoutBtn" class="btn btn-danger btn-sm">
+                            <i class="bi bi-arrow-right-square"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -53,7 +62,7 @@
             <div class="row mt-4 justify-content-center">
                 <!-- Kategori Table -->
                 <div class="col-md-12 col-lg-12 mb-4">
-                    <form action="" method="post">
+                    <form method="post" id="productForm">
                         <div class="card">
                             <div class="card-header bg-info p-3"></div>
                             <div class="card-body">
@@ -61,9 +70,8 @@
                                     <label for="kategori" class="form-label">Kategori</label>
                                     <select name="kategori" id="kategori" class="form-select">
                                         <option selected></option>
-                                        <option value="">Kategori 1</option>
-                                        <option value="">Kategori 2</option>
-                                        <option value="">Kategori 3</option>
+
+                                        <!-- option dinamis -->
                                     </select>
                                 </div>
                                 <div class="row">
@@ -86,8 +94,8 @@
                                     <label for="status" class="form-label">Status</label>
                                     <select name="status" id="status" class="form-select">
                                         <option selected></option>
-                                        <option value="">Ada</option>
-                                        <option value="">Kosong</option>
+                                        <option value="Ada">Ada</option>
+                                        <option value="Kosong">Kosong</option>
                                     </select>
                                 </div>
                             </div>
@@ -109,6 +117,109 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
+        <script type="module">
+
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+            import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyBatww_KyYImYVgZNRfgkBnagqQcNYA-yA",
+                authDomain: "dbkasir-f7cc3.firebaseapp.com",
+                databaseURL: "https://dbkasir-f7cc3-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "dbkasir-f7cc3",
+                storageBucket: "dbkasir-f7cc3.appspot.com",
+                messagingSenderId: "179332456815",
+                appId: "1:179332456815:web:ae2620d7f651b1519e489a",
+                measurementId: "G-MC9Q4FC6J7"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+
+            // Input form kategori
+            const kategoriSelect = document.getElementById('kategori');
+
+            function loadKategoriAktif() {
+                const categorysRef = ref(database, 'categories');
+
+                // Mengambil data dan memfilter hanya yang statusnya "Aktif"
+                onValue(categorysRef, (snapshot) => {
+                    kategoriSelect.innerHTML = '<option selected></option>'; // Kosongkan select
+
+                    if (!snapshot.exists()) {
+                        console.log("Tidak ada kategori yang tersedia.");
+                        return;
+                    }
+
+                    snapshot.forEach((childSnapshot) => {
+                        const category = childSnapshot.val();
+
+                        if (category.status === 'Aktif') {
+                            // Buat elemen option untuk setiap kategori yang statusnya "Aktif"
+                            const option = document.createElement('option');
+                            option.value = category.kategori; // atau bisa menggunakan category.kategori sesuai kebutuhan Anda
+                            option.textContent = category.kategori;
+
+                            // Tambahkan option ke dalam select
+                            kategoriSelect.appendChild(option);
+                        }
+                    });
+                });
+            }
+
+            // Panggil fungsi untuk memuat kategori aktif
+            loadKategoriAktif();
+
+            document.getElementById('productForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const categorie = document.getElementById('kategori').value;
+                const status = document.getElementById('status').value;
+                const product = document.getElementById('produk').value;
+                const price = document.getElementById('harga').value;
+
+                const productRef = ref(database, 'products');
+                push(productRef, {
+                    kategori: categorie,
+                    produk: product,
+                    harga: price,
+                    status: status,
+                }).then(() => {
+                    alert('Produk berhasil ditambahkan!');
+                    window.location.href = 'home.html';
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
+            });
+
+
+            // Handle logout
+            document.getElementById('logoutBtn').addEventListener('click', function () {
+                // Hapus informasi pengguna dari localStorage
+                localStorage.removeItem('loggedInUser');
+
+                // Redirect ke halaman login
+                window.location.href = '../auth/login.html';
+            });
+
+        </script>
+
+        <script>
+            // Mengambil informasi pengguna dari localStorage
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+            // Menampilkan informasi pengguna di halaman index
+            if (loggedInUser) {
+                // document.getElementById('usernameDisplay').innerText = loggedInUser.username;
+                // document.getElementById('emailDisplay').innerText = loggedInUser.email;
+            } else {
+                // Jika pengguna belum login, redirect ke halaman login
+                window.location.href = '../auth/login.html';
+            }
+
+        </script>
 
     </body>
 

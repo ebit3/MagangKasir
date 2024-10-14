@@ -28,18 +28,27 @@
                             <a class="nav-link" href="../index.html">Beranda</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="../user/home.html">Pengguna</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="../produk/home.html">Produk</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="home.html">Kategori</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Transaksi</a>
+                            <a class="nav-link" href="../transaksi/home.html">Transaksi</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Laporan</a>
                         </li>
                     </ul>
+                    <form class="d-flex">
+                        <!-- Tombol Logout -->
+                        <button id="logoutBtn" class="btn btn-danger btn-sm">
+                            <i class="bi bi-arrow-right-square"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -128,6 +137,31 @@
                 });
             });
 
+
+
+            // Handle logout
+            document.getElementById('logoutBtn').addEventListener('click', function () {
+                // Hapus informasi pengguna dari localStorage
+                localStorage.removeItem('loggedInUser');
+
+                // Redirect ke halaman login
+                window.location.href = '../auth/login.html';
+            });
+
+        </script>
+
+        <script>
+            // Mengambil informasi pengguna dari localStorage
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+            // Menampilkan informasi pengguna di halaman index
+            if (loggedInUser) {
+                // document.getElementById('usernameDisplay').innerText = loggedInUser.username;
+                // document.getElementById('emailDisplay').innerText = loggedInUser.email;
+            } else {
+                // Jika pengguna belum login, redirect ke halaman login
+                window.location.href = '../auth/login.html';
+            }
         </script>
 
     </body>

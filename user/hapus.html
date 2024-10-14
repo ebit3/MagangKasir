@@ -28,13 +28,13 @@
                             <a class="nav-link" href="../index.html">Beranda</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../user/home.html">Pengguna</a>
+                            <a class="nav-link active" aria-current="page" href="home.html">Pengguna</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../produk/home.html">Produk</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="home.html">Kategori</a>
+                            <a class="nav-link" href="../kategori/home.html">Kategori</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../transaksi/home.html">Transaksi</a>
@@ -56,16 +56,16 @@
         <!-- Main Content -->
         <div class="container mt-5">
             <div class="row text-center">
-                <h1>Data Kategori</h1>
+                <h1>Data Pengguna</h1>
             </div>
 
             <div class="row mt-4 justify-content-center">
-                <!-- Kategori Table -->
+                <!-- Pengguna Table -->
                 <div class="col-md-12 col-lg-12 mb-4">
                     <div class="card">
                         <div class="card-header bg-info p-3"></div>
                         <div class="card-body">
-                            <ul id="categorieInfo" class="list-group list-group-numbered">
+                            <ul id="usersInfo" class="list-group list-group-numbered">
                                 <!-- Data produk akan ditampilkan di sini -->
                             </ul>
                         </div>
@@ -107,19 +107,20 @@
             const database = getDatabase(app);
 
             const urlParams = new URLSearchParams(window.location.search);
-            const categorieId = urlParams.get('id');
+            const userId = urlParams.get('id');
 
-            const categorieRef = ref(database, 'categories/' + categorieId);
+            const usersRef = ref(database, 'users/' + userId);
 
-            get(categorieRef).then((snapshot) => {
+            get(usersRef).then((snapshot) => {
                 if (snapshot.exists()) {
-                    const product = snapshot.val();
-                    document.getElementById('categorieInfo').innerHTML = `
-                    <li class="list-group-item border border-0"><strong>Nama Kategori:</strong> ${product.kategori}</li>                    
-                    <li class="list-group-item border-0"><strong>Status Kategori:</strong> ${product.status}</li>                    
+                    const user = snapshot.val();
+                    document.getElementById('usersInfo').innerHTML = `
+                    <li class="list-group-item border border-0"><strong>Nama Pengguna : </strong> ${user.username}</li>                    
+                    <li class="list-group-item border border-0"><strong>Email Pengguna : </strong> ${user.email}</li>                    
+                    <li class="list-group-item border-0"><strong>Role : </strong> ${user.role}</li>                    
                 `;
                 } else {
-                    alert('Kategori tidak ditemukan!');
+                    alert('Pengguna tidak ditemukan!');
                     window.location.href = 'home.html';
                 }
             }).catch((error) => {
@@ -127,9 +128,9 @@
             });
 
             document.getElementById('deleteBtn').addEventListener('click', function () {
-                if (confirm('Apakah Anda yakin ingin menghapus Kategori ini?')) {
-                    remove(categorieRef).then(() => {
-                        alert('Kategori berhasil dihapus!');
+                if (confirm('Apakah Anda yakin ingin menghapus Pengguna ini?')) {
+                    remove(usersRef).then(() => {
+                        alert('Pengguna berhasil dihapus!');
                         window.location.href = 'home.html';
                     }).catch((error) => {
                         console.error('Error:', error);
@@ -137,29 +138,6 @@
                 }
             });
 
-            // Handle logout
-            document.getElementById('logoutBtn').addEventListener('click', function () {
-                // Hapus informasi pengguna dari localStorage
-                localStorage.removeItem('loggedInUser');
-
-                // Redirect ke halaman login
-                window.location.href = '../auth/login.html';
-            });
-
-        </script>
-
-        <script>
-            // Mengambil informasi pengguna dari localStorage
-            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-
-            // Menampilkan informasi pengguna di halaman index
-            if (loggedInUser) {
-                // document.getElementById('usernameDisplay').innerText = loggedInUser.username;
-                // document.getElementById('emailDisplay').innerText = loggedInUser.email;
-            } else {
-                // Jika pengguna belum login, redirect ke halaman login
-                window.location.href = '../auth/login.html';
-            }
         </script>
 
     </body>

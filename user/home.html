@@ -28,13 +28,13 @@
                             <a class="nav-link" href="../index.html">Beranda</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../user/home.html">Pengguna</a>
+                            <a class="nav-link active" aria-current="page" href="home.html">Pengguna</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../produk/home.html">Produk</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="home.html">Kategori</a>
+                            <a class="nav-link" href="../kategori/home.html">Kategori</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../transaksi/home.html">Transaksi</a>
@@ -56,11 +56,11 @@
         <!-- Main Content -->
         <div class="container mt-5">
             <div class="row text-center">
-                <h1>Data Kategori</h1>
+                <h1>Data Pengguna</h1>
             </div>
 
             <div class="row mt-4 justify-content-center">
-                <!-- Kategori Table -->
+                <!-- Pengguna Table -->
                 <div class="col-md-12 col-lg-12 mb-4">
                     <div class="card">
                         <div class="card-header bg-white p-3">
@@ -68,7 +68,7 @@
                                 <span>
                                     <i class="bi bi-plus-lg"></i>
                                 </span>
-                                Tambah Kategori
+                                Tambah Pengguna
                             </a>
                         </div>
                         <div class="card-body">
@@ -80,25 +80,27 @@
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </span>
-                                        Hapus Semua Kategori
+                                        Hapus Semua Pengguna
                                     </caption>
                                     <thead>
                                         <tr>
-                                            <th scope="col">Kategori</th>
-                                            <th scope="col">Status</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">role</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tableCategorieBody">
+                                    <tbody id="tableUsersBody">
 
                                     </tbody>
                                 </table>
 
                                 <!-- Template for category row -->
-                                <template id="categorie-template">
+                                <template id="users-template">
                                     <tr>
-                                        <td class="row-categorie"></td>
-                                        <td class="row-status"></td>
+                                        <td class="row-username"></td>
+                                        <td class="row-email"></td>
+                                        <td class="row-role"></td>
                                         <td>
                                             <a href="hapus.html" class="btn btn-sm btn-danger delete-link">
                                                 <i class="bi bi-trash"></i>
@@ -146,46 +148,46 @@
             const app = initializeApp(firebaseConfig);
             const database = getDatabase(app);
 
-            const tableCategorieBody = document.getElementById('tableCategorieBody');
-            const template = document.getElementById('categorie-template').content;
+            const tableUsersBody = document.getElementById('tableUsersBody');
+            const template = document.getElementById('users-template').content;
 
             function loadData() {
                 // Gunakan orderByChild untuk mengurutkan data berdasarkan abjad (kategori)
-                const categorysRef = query(ref(database, 'categories'), orderByChild('kategori'));
+                const usersRef = query(ref(database, 'users'), orderByChild('username'));
 
-                onValue(categorysRef, (snapshot) => {
-                    tableCategorieBody.innerHTML = ''; // Bersihkan data yang ada
+                onValue(usersRef, (snapshot) => {
+                    tableUsersBody.innerHTML = ''; // Bersihkan data yang ada
 
                     if (!snapshot.exists()) {
                         // Jika tidak ada data yang tersedia
-                        tableCategorieBody.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada kategori yang tersedia</td></tr>';
+                        tableUsersBody.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada kategori yang tersedia</td></tr>';
                         return;
                     }
 
                     snapshot.forEach((childSnapshot) => {
-                        const category = childSnapshot.val();
+                        const users = childSnapshot.val();
                         const clone = document.importNode(template, true);
 
-                        // Isi template dengan data
-                        clone.querySelector('.row-categorie').textContent = category.kategori;
 
                         // Kondisi untuk menentukan status dan class badge
-                        const statusElement = clone.querySelector('.row-status');
-                        statusElement.textContent = category.status;
+                        const roleElement = clone.querySelector('.row-role');
+                        roleElement.textContent = users.role;
 
-                        if (category.status === 'Aktif') {
-                            statusElement.innerHTML = '<span class="badge rounded-pill text-bg-primary px-3">Aktif</span>';
-                        } else if (category.status === 'Tidak aktif') {
-                            statusElement.innerHTML = '<span class="badge rounded-pill text-bg-danger px-3">Tidak Aktif</span>';
+                        if (users.role === 'admin') {
+                            roleElement.innerHTML = '<span class="badge rounded-pill text-bg-primary px-3">Admin</span>';
+                        } else if (users.role === 'kasir') {
+                            roleElement.innerHTML = '<span class="badge rounded-pill text-bg-info px-3">Kasir</span>';
                         }
 
                         // Isi template dengan data
-                        clone.querySelector('.row-categorie').textContent = category.kategori;
-                        clone.querySelector('.edit-link').href = `edit.html?id=${childSnapshot.key}`;
-                        clone.querySelector('.delete-link').href = `hapus.html?id=${childSnapshot.key}`;
+                        clone.querySelector('.row-username').textContent = users.username;
+                        clone.querySelector('.row-email').textContent = users.email;
+                        // clone.querySelector('.row-role').textContent = users.role;
+                        clone.querySelector('.edit-link').href = `edit.html?id=${users.username}`;
+                        clone.querySelector('.delete-link').href = `hapus.html?id=${users.username}`;
 
                         // Tambahkan baris yang sudah diisi ke dalam table body
-                        tableCategorieBody.appendChild(clone);
+                        tableUsersBody.appendChild(clone);
                     });
                 });
             }
@@ -193,19 +195,18 @@
             loadData();
 
             // delete all
-            const categorieRef = ref(database, 'categories');
+            const usersRef = ref(database, 'users');
 
             document.getElementById('deleteBtn').addEventListener('click', function () {
-                if (confirm('Apakah Anda yakin ingin menghapus semua Kategori ini?')) {
-                    remove(categorieRef).then(() => {
-                        alert('Kategori berhasil dihapus!');
+                if (confirm('Apakah Anda yakin ingin menghapus semua Pengguna ini?')) {
+                    remove(usersRef).then(() => {
+                        alert('Pengguna berhasil dihapus!');
                         window.location.href = 'home.html';
                     }).catch((error) => {
                         console.error('Error:', error);
                     });
                 }
             });
-
 
             // Handle logout
             document.getElementById('logoutBtn').addEventListener('click', function () {

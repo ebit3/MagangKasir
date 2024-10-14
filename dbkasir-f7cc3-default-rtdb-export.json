@@ -1,0 +1,134 @@
+{
+	"categories": {
+		"-O7YzeHYJ5sSzqqHm-HP": {
+			"kategori": "kategori 1",
+			"status": "Aktif"
+		},
+		"-O7YzhkvS0ubQp5hL5nC": {
+			"kategori": "kategori 2 ",
+			"status": "Tidak aktif"
+		},
+		"-O7YzkotO7gH5coqZpy8": {
+			"kategori": "kategori 3",
+			"status": "Aktif"
+		},
+
+		"-O8AAA1111SzqqHm-HP": {
+			"kategori": "kategori 4",
+			"status": "Aktif"
+		},
+		"-O8AAA2222SzqqHm-HP": {
+			"kategori": "kategori 5",
+			"status": "Tidak aktif"
+		},
+		"-O8AAA3333SzqqHm-HP": {
+			"kategori": "kategori 6",
+			"status": "Aktif"
+		},
+		"-O8AAA4444SzqqHm-HP": {
+			"kategori": "kategori 7",
+			"status": "Tidak aktif"
+		},
+		"-O8AAA5555SzqqHm-HP": {
+			"kategori": "kategori 8",
+			"status": "Aktif"
+		},
+		"-O8AAA6666SzqqHm-HP": {
+			"kategori": "kategori 9",
+			"status": "Tidak aktif"
+		},
+		"-O8AAA7777SzqqHm-HP": {
+			"kategori": "kategori 10",
+			"status": "Aktif"
+		}
+	},
+	"products": {
+		"-O7Yznzf3EjU6ZLM6lTr": {
+			"harga": "10000",
+			"kategori": "kategori 1",
+			"produk": "produk 1",
+			"status": "Ada"
+		},
+		"-O7Yzr11qg6kc3Nhg-bH": {
+			"harga": "3000",
+			"kategori": "kategori 3",
+			"produk": "produk 2",
+			"status": "Kosong"
+		},
+		"-O7Yzu87JDO19RKQa_e9": {
+			"harga": "15000",
+			"kategori": "kategori 1",
+			"produk": "produk 9",
+			"status": "Ada"
+		},
+
+		"-O8BBB1111U6ZLM6lTr": {
+			"harga": "12000",
+			"kategori": "kategori 2",
+			"produk": "produk 3",
+			"status": "Ada"
+		},
+		"-O8BBB2222U6ZLM6lTr": {
+			"harga": "5000",
+			"kategori": "kategori 4",
+			"produk": "produk 4",
+			"status": "Kosong"
+		},
+		"-O8BBB3333U6ZLM6lTr": {
+			"harga": "8000",
+			"kategori": "kategori 5",
+			"produk": "produk 5",
+			"status": "Ada"
+		},
+		"-O8BBB4444U6ZLM6lTr": {
+			"harga": "25000",
+			"kategori": "kategori 6",
+			"produk": "produk 6",
+			"status": "Kosong"
+		},
+		"-O8BBB5555U6ZLM6lTr": {
+			"harga": "7500",
+			"kategori": "kategori 7",
+			"produk": "produk 7",
+			"status": "Ada"
+		},
+		"-O8BBB6666U6ZLM6lTr": {
+			"harga": "30000",
+			"kategori": "kategori 8",
+			"produk": "produk 8",
+			"status": "Kosong"
+		},
+		"-O8BBB7777U6ZLM6lTr": {
+			"harga": "9500",
+			"kategori": "kategori 9",
+			"produk": "produk 10",
+			"status": "Ada"
+		},
+		"-O8BBB8888U6ZLM6lTr": {
+			"harga": "20000",
+			"kategori": "kategori 10",
+			"produk": "produk 11",
+			"status": "Ada"
+		},
+		"-O8BBB9999U6ZLM6lTr": {
+			"harga": "17000",
+			"kategori": "kategori 3",
+			"produk": "produk 12",
+			"status": "Ada"
+		}
+	},
+	"users": {
+		"admin": {
+			"email": "admin@gmail.com",
+			"password": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
+			"role": "admin",
+			"username": "admin"
+		},
+		"kasir": {
+			"email": "kasir@gmail.com",
+			"password": "2c7ee7ade401a7cef9ef4dad9978998cf42ed805243d6c91f89408c6097aa571",
+			"role": "kasir",
+			"username": "kasir"
+		}
+	}
+}

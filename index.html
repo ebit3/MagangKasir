@@ -28,6 +28,9 @@
                             <a class="nav-link active" aria-current="page" href="index.html">Beranda</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="user/home.html">Pengguna</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="produk/home.html">Produk</a>
                         </li>
                         <li class="nav-item">
@@ -40,6 +43,12 @@
                             <a class="nav-link" href="#">Laporan</a>
                         </li>
                     </ul>
+                    <form class="d-flex" role="search">
+                        <!-- Tombol Logout -->
+                        <button id="logoutBtn" class="btn btn-danger btn-sm">
+                            <i class="bi bi-arrow-right-square"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -48,7 +57,9 @@
         <div class="container mt-5">
             <div class="row text-center">
                 <h1>Dashboard Kasir</h1>
-                <p class="lead">Selamat datang di aplikasi kasir Muji Perkasa Anda. Berikut adalah informasi terkait
+                <p class="lead">Selamat datang <span id="usernameDisplay" class="fw-bold"></span>! di aplikasi kasir
+                    Muji Perkasa Anda.
+                    Berikut adalah informasi terkait
                     data kasir.</p>
             </div>
 
@@ -58,7 +69,7 @@
                     <div class="card card-dashboard text-center p-4">
                         <div class="card-body">
                             <h5 class="card-title">Jumlah Produk</h5>
-                            <p class="card-text" id="totalProduk">0</p>
+                            <p class="card-text" id="totalProduk">Loading...</p>
                         </div>
                     </div>
                 </div>
@@ -67,18 +78,18 @@
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card card-dashboard text-center p-4">
                         <div class="card-body">
-                            <h5 class="card-title">Total Transaksi</h5>
-                            <p class="card-text" id="totalTransaksi">0</p>
+                            <h5 class="card-title">Total Kategori</h5>
+                            <p class="card-text" id="totalKategori">Loading...</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Laporan Card -->
+                <!-- Pengguna Card -->
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card card-dashboard text-center p-4">
                         <div class="card-body">
-                            <h5 class="card-title">Total Laporan</h5>
-                            <p class="card-text" id="totalLaporan">0</p>
+                            <h5 class="card-title">Total Pengguna</h5>
+                            <p class="card-text" id="totalPengguna">Loading..</p>
                         </div>
                     </div>
                 </div>
@@ -92,12 +103,79 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-        <!-- JavaScript Example to Populate Data -->
-        <script>
-            // Contoh script untuk menampilkan data
-            document.getElementById('totalProduk').innerHTML = 150; // Misalnya total produk ada 150
-            document.getElementById('totalTransaksi').innerHTML = 320; // Misalnya total transaksi ada 320
-            document.getElementById('totalLaporan').innerHTML = 25; // Misalnya total laporan ada 25
+        <script type="module">
+
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+            import { getDatabase, ref, onValue, orderByChild, query, remove } from
+                "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyBatww_KyYImYVgZNRfgkBnagqQcNYA-yA",
+                authDomain: "dbkasir-f7cc3.firebaseapp.com",
+                databaseURL: "https://dbkasir-f7cc3-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "dbkasir-f7cc3",
+                storageBucket: "dbkasir-f7cc3.appspot.com",
+                messagingSenderId: "179332456815",
+                appId: "1:179332456815:web:ae2620d7f651b1519e489a",
+                measurementId: "G-MC9Q4FC6J7"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+
+            function loadData() {
+                const productsRef = ref(database, 'products');
+                const categoriesRef = ref(database, 'categories');
+                const usersRef = ref(database, 'users');
+
+                // Menghitung jumlah produk
+                onValue(productsRef, (snapshot) => {
+                    const totalProducts = snapshot.size;
+                    document.getElementById('totalProduk').textContent = totalProducts;
+                });
+
+                // Menghitung jumlah kategori
+                onValue(categoriesRef, (snapshot) => {
+                    const totalCategories = snapshot.size;
+                    document.getElementById('totalKategori').textContent = totalCategories;
+                });
+
+                // Menghitung jumlah kategori
+                onValue(usersRef, (snapshot) => {
+                    const totalUsers = snapshot.size;
+                    document.getElementById('totalPengguna').textContent = totalUsers;
+                });
+
+            }
+
+            loadData();
+
+
+            // Check if user is logged in
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+
+            if (!loggedInUser) {
+                // Redirect to login page if not logged in
+                window.location.href = 'auth/login.html';  // Replace with your actual login page URL
+            } else {
+                const user = JSON.parse(loggedInUser);
+                console.log('Logged in as:', user.username);
+                // You can display user info or perform other actions
+            }
+
+            // Logout function
+            function logout() {
+                // Remove the session storage data
+                sessionStorage.removeItem('loggedInUser');
+                // Redirect to the login page
+                window.location.href = 'auth/login.html';  // Replace with your actual login page URL
+            }
+
+            // Attach the logout function to the button click event
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+
         </script>
 
     </body>

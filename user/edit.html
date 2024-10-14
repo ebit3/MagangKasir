@@ -28,13 +28,13 @@
                             <a class="nav-link" href="../index.html">Beranda</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../user/home.html">Pengguna</a>
+                            <a class="nav-link active" aria-current="page" href="home.html">Pengguna</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../produk/home.html">Produk</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="home.html">Kategori</a>
+                            <a class="nav-link" href="../kategori/home.html">Kategori</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../transaksi/home.html">Transaksi</a>
@@ -62,27 +62,46 @@
             <div class="row mt-4 justify-content-center">
                 <!-- Kategori Table -->
                 <div class="col-md-12 col-lg-12 mb-4">
-                    <form action="" method="post" id="categorieForm">
+                    <form method="post" id="usersFrom">
                         <div class="card">
-                            <div class="card-header bg-warning p-3"></div>
+                            <div class="card-header bg-info p-3"></div>
                             <div class="card-body">
                                 <div class="mb-3">
-                                    <label for="kategori" class="form-label">Kategori</label>
-                                    <input type="text" name="kategori" id="kategori" class="form-control shadow-none"
-                                        placeholder="Masukkan Kategori" required>
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" placeholder="Enter username">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="status" class="form-label">Status Kategori</label>
-                                    <select name="status" id="status" class="form-select">
-                                        <option selected></option>
-                                        <option value="Aktif">Aktif</option>
-                                        <option value="Tidak aktif">Tidak Aktif</option>
-                                    </select>
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Enter email">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="password" class="form-label">Password</label>
+                                            <input type="password" class="form-control" id="password"
+                                                placeholder="Enter password">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="confirm-password" class="form-label">Confirm Password</label>
+                                            <input type="password" class="form-control" id="confirm-password"
+                                                placeholder="Confirm password">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="role" class="form-label">Level Pengguna</label>
+                                        <select name="role" id="role" class="form-select">
+                                            <option selected></option>
+                                            <option value="kasir">Kasir</option>
+                                            <option value="admin">Admin</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-footer p-3 bg-white">
                                 <a href="home.html" class="btn btn-danger">Kembali</a>
-                                <button class="btn btn-primary" type="submit" name="simpan">Simpan</button>
+                                <button class="btn btn-primary" type="submit" name="simpan" id="submit">Simpan</button>
                             </div>
                         </div>
                     </form>
@@ -96,6 +115,10 @@
         </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Tambahkan library CryptoJS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
+
 
         <script type="module">
 
@@ -119,36 +142,52 @@
             const database = getDatabase(app);
 
             const urlParams = new URLSearchParams(window.location.search);
-            const categorieId = urlParams.get('id');
+            const userID = urlParams.get('id');
 
-            const categorieRef = ref(database, 'categories/' + categorieId);
+            const usersRef = ref(database, 'users/' + userID);
 
-            get(categorieRef).then((snapshot) => {
+            get(usersRef).then((snapshot) => {
                 if (snapshot.exists()) {
-                    const categorie = snapshot.val();
-                    document.getElementById('kategori').value = categorie.kategori;
-                    document.getElementById('status').value = categorie.status;
+                    const user = snapshot.val();
+
+                    document.getElementById('username').value = user.username;
+                    document.getElementById('email').value = user.email;
+                    document.getElementById('password').value = user.password;
+                    document.getElementById('role').value = user.role;
                 } else {
-                    alert('Kategori tidak ditemukan!');
+                    alert('Pengguna tidak ditemukan!');
                     window.location.href = 'home.html';
                 }
             }).catch((error) => {
                 console.error('Error:', error);
             });
 
-            document.getElementById('categorieForm').addEventListener('submit', function (e) {
+            document.getElementById('usersFrom').addEventListener('submit', function (e) {
                 e.preventDefault();
 
-                const categorie = document.getElementById('kategori').value;
-                const status = document.getElementById('status').value;
+                const username = document.getElementById('username').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const role = document.getElementById('role').value;
 
-                update(categorieRef, {
+                // Validate inputs (optional: you can add more validation if needed)
+                if (username === '' || email === '' || password === '') {
+                    alert('Semua kolom wajib diisi.');
+                    return;
+                }
 
-                    kategori: categorie,
-                    status: status,
+                // Hash the password using CryptoJS
+                const hashedPassword = CryptoJS.SHA256(password).toString();
+
+                update(usersRef, {
+
+                    username: username,
+                    email: email,
+                    role: role,
+                    password: hashedPassword // Save the hashed password
                 }).then(() => {
 
-                    alert('Kategori berhasil diperbarui!');
+                    alert('Pengguna berhasil diperbarui!');
                     window.location.href = 'home.html';
                 }).catch((error) => {
 
@@ -156,30 +195,8 @@
                 });
             });
 
-            // Handle logout
-            document.getElementById('logoutBtn').addEventListener('click', function () {
-                // Hapus informasi pengguna dari localStorage
-                localStorage.removeItem('loggedInUser');
-
-                // Redirect ke halaman login
-                window.location.href = '../auth/login.html';
-            });
-
         </script>
 
-        <script>
-            // Mengambil informasi pengguna dari localStorage
-            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-
-            // Menampilkan informasi pengguna di halaman index
-            if (loggedInUser) {
-                // document.getElementById('usernameDisplay').innerText = loggedInUser.username;
-                // document.getElementById('emailDisplay').innerText = loggedInUser.email;
-            } else {
-                // Jika pengguna belum login, redirect ke halaman login
-                window.location.href = '../auth/login.html';
-            }
-        </script>
     </body>
 
 </html>

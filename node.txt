@@ -1,0 +1,437 @@
+==================== transaksi kasir ====================
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard Kasir</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="../assets/dist/css/index.css">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    </head>
+
+    <body>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../index.html">Muji Perkasa</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="home.html" aria-current="page">Transaksi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Laporan</a>
+                        </li>
+                        <li class="nav-item">
+                            <!-- Tombol Logout -->
+                            <button id="logoutBtn" class="btn btn-danger">Logout</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container mt-5">
+            <div class="row text-center">
+                <h1>Transaksi</h1>
+            </div>
+
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-12 col-lg-12 mb-4">
+                    <form action="" method="post" id="addProductForm">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row align-items-end">
+                                    <!-- Input Produk -->
+                                    <div class="col-lg-5 col-md-4">
+                                        <div class="mb-3">
+                                            <label for="produk" class="form-label">Nama Produk</label>
+                                            <select name="produk" id="productSelect" class="form-select">
+                                                <option selected>Pilih Produk...</option>
+                                                <!-- list dinamis produk -->
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Input Quantity -->
+                                    <div class="col-lg-5 col-md-4">
+                                        <div class="mb-3">
+                                            <label for="qty" class="form-label">Jumlah Barang</label>
+                                            <input type="number" name="qty" id="productQuantity" class="form-control"
+                                                required placeholder="Masukkan jumlah barang">
+                                        </div>
+                                    </div>
+
+                                    <!-- Tombol Submit -->
+                                    <div class="col-lg-2 col-md-4">
+                                        <div class="mb-3">
+                                            <button class="btn btn-primary fw-semibold w-100" type="submit"
+                                                name="submit">
+                                                <i class="bi bi-bag-fill me-2"></i>
+                                                Tambah
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Cart Table -->
+                <div class="col-md-7 col-lg-7 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary p-3 text-white">
+                            Keranjang Belanja
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table caption-top align-middle">
+                                    <caption class="text-start fw-bold">Keranjang Belanja Anda</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Barang</th>
+                                            <th scope="col">Harga</th>
+                                            <th scope="col">Jumlah</th>
+                                            <th scope="col">Subtotal</th>
+                                            <th scope="col">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cartTableBody">
+                                        <!-- Isi keranjang akan dirender di sini -->
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3" class="text-end fw-bold h4">Total : </td>
+                                            <!-- Total Belanja pada tabel -->
+                                            <td colspan="2" class="fw-bold h4" id="totalAmountTable"></td>
+
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detail Belanja -->
+                <div class="col-md-5 col-lg-5 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary p-3 text-white">
+                            Detail Belanja
+                        </div>
+                        <div class="card-body">
+                            <!-- Kode Belanja -->
+                            <div class="mb-3">
+                                <label for="kodeBelanja" class="form-label">Kode Belanja</label>
+                                <input type="text" name="kode" id="kodeBelanja" class="form-control" value="xysjsm"
+                                    disabled>
+                            </div>
+
+                            <!-- Tanggal Belanja -->
+                            <div class="mb-3">
+                                <label for="tglBelanja" class="form-label">Tanggal Belanja</label>
+                                <input type="date" name="tgl" id="tglBelanja" class="form-control" value="2024-09-05"
+                                    disabled>
+                            </div>
+
+                            <!-- Tombol untuk menambah diskon -->
+                            <div class="mb-3">
+                                <button id="btnTambahDiskon" class="btn btn-outline-primary btn-sm">Tambahkan
+                                    Diskon</button>
+                            </div>
+
+                            <!-- Input Form Diskon (tersembunyi secara default) -->
+                            <div id="formDiskon" class="mb-3" style="display: none;">
+                                <label for="diskon" class="form-label">Diskon (%)</label>
+                                <input type="number" name="diskon" id="diskon" class="form-control"
+                                    placeholder="Masukkan diskon">
+                            </div>
+
+                            <!-- Total Belanja -->
+                            <div class="mb-3">
+                                <label for="totalBelanjaInput" class="form-label">Total Belanja</label>
+                                <!-- Total Belanja pada input -->
+                                <input type="text" name="total" id="totalAmountInput" class="form-control" readonly>
+                            </div>
+
+                            <!-- Jumlah Uang -->
+                            <div class="mb-3">
+                                <label for="jumlahUang" class="form-label">Jumlah Uang</label>
+                                <input type="text" name="jumlahUang" id="jumlahUang" class="form-control"
+                                    placeholder="0">
+                            </div>
+
+                            <!-- Kembalian -->
+                            <div class="mb-3">
+                                <label for="kembalianBelanja" class="form-label">Kembalian Belanja</label>
+                                <input type="text" name="kembalian" id="kembalianBelanja" class="form-control"
+                                    value="Rp. 0" disabled>
+                            </div>
+
+                            <!-- Tombol Selesai Belanja -->
+                            <div class="d-grid">
+                                <button class="btn btn-primary">Selesai Belanja</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 Muji Perkasa. All Rights Reserved.</p>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script type="module">
+            // Firebase initialization and loading products from Firebase
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+            import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyBatww_KyYImYgZNRfgkBnagqQcNYA-yA",
+                authDomain: "dbkasir-f7cc3.firebaseapp.com",
+                databaseURL: "https://dbkasir-f7cc3-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "dbkasir-f7cc3",
+                storageBucket: "dbkasir-f7cc3.appspot.com",
+                messagingSenderId: "179332456815",
+                appId: "1:179332456815:web:ae2620d7f651b1519e489a",
+                measurementId: "G-MC9Q4FC6J7"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+
+            // select produk
+            const productSelect = document.getElementById('productSelect');
+            let products = [];
+
+            // Load products from Firebase Realtime Database
+            function loadProducts() {
+                const productsRef = ref(database, 'products');
+                onValue(productsRef, (snapshot) => {
+                    products = [];
+                    productSelect.innerHTML = ''; // Clear existing options
+
+                    snapshot.forEach((childSnapshot) => {
+                        const product = childSnapshot.val();
+                        products.push({ id: childSnapshot.key, ...product });
+
+                        const option = document.createElement('option');
+                        option.value = childSnapshot.key;
+                        // option.textContent = `${product.produk} - ${product.harga}`;
+                        option.text = `${product.produk} (Rp. ${product.harga})`;
+                        productSelect.appendChild(option);
+                    });
+                });
+            }
+            loadProducts();
+
+            // Cart functionality using localStorage
+            let cart = JSON.parse(localStorage.getItem('cart')) || []; // Load cart from localStorage or empty array
+            let discount = parseFloat(localStorage.getItem('discount')) || 0; // Load discount from localStorage
+            let totalBeforeDiscount = parseFloat(localStorage.getItem('totalBeforeDiscount')) || 0; // Load totalBeforeDiscount from localStorage
+
+            // Fungsi untuk parsing string rupiah menjadi angka numerik
+            // function parseLocaleNumber(stringNumber) {
+            //     return parseFloat(stringNumber.replace(/\./g, '').replace(',', '.'));
+            // }
+
+            function parseLocaleNumber(stringNumber) {
+                if (typeof stringNumber === 'string') {
+                    // Hapus simbol Rp dan koma dari string
+                    return parseFloat(stringNumber.replace(/Rp\.|\./g, '').replace(/,/g, '.')) || 0;
+                }
+                return 0;
+            }
+
+
+            // Add product to cart
+            document.getElementById('addProductForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const selectedProductId = productSelect.value;
+                const selectedProduct = products.find(product => product.id === selectedProductId);
+                const productQuantityInput = document.getElementById('productQuantity');
+                const productQuantity = parseInt(productQuantityInput.value);
+
+                const existingProduct = cart.find(item => item.id === selectedProductId);
+                if (existingProduct) {
+                    existingProduct.quantity += productQuantity;
+                } else {
+                    const product = { id: selectedProductId, produk: selectedProduct.produk, harga: selectedProduct.harga, quantity: productQuantity };
+                    cart.push(product);
+                }
+
+                localStorage.setItem('cart', JSON.stringify(cart)); // Save cart to localStorage
+                updateCartTable();
+
+                // Clear quantity input after adding product to cart
+                productQuantityInput.value = '';
+            });
+
+            // Remove product from cart
+            window.removeProduct = function (index) {
+                cart.splice(index, 1);
+                localStorage.setItem('cart', JSON.stringify(cart)); // Update localStorage after removal
+                updateCartTable();
+            };
+
+            // Update both totalAmountTable and totalAmountInput
+            function updateCartTable() {
+                const cartTableBody = document.getElementById('cartTableBody');
+                cartTableBody.innerHTML = '';
+
+                let total = 0;
+                cart.forEach((product, index) => {
+                    const subtotal = parseFloat(product.harga) * parseInt(product.quantity); // Convert price and quantity to numbers
+                    total += subtotal;
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${product.produk}</td>
+                        <td>${product.harga}</td>
+                        <td>${product.quantity}</td>
+                        <td>${subtotal.toLocaleString('id-ID')}</td>
+                        <td><button class="btn btn-danger btn-sm" onclick="removeProduct(${index})">
+                            <i class="bi bi-trash"></i>
+                        </button></td>
+                    `;
+                    cartTableBody.appendChild(tr);
+                });
+
+                totalBeforeDiscount = total; // Save total before discount
+                localStorage.setItem('totalBeforeDiscount', totalBeforeDiscount); // Store in localStorage
+
+                const totalAfterDiscount = Math.max(total - discount, 0); // Ensure total doesn't go negative
+
+                // Update both the table and input field with total amount
+
+                // document.getElementById('totalAmountTable').textContent = totalAfterDiscount.toLocaleString('id-ID');
+                // document.getElementById('totalAmountInput').value = totalAfterDiscount; // Save as a number (not formatted)
+
+                totalAmountTable.textContent = `Rp. ${totalAfterDiscount.toLocaleString()}`;
+                // totalAmountInput.value = `Rp. ${totalAfterDiscount.toLocaleString()}`;
+                totalAmountInput.value = totalAfterDiscount; // Simpan angka tanpa format 'Rp.' untuk penghitungan
+
+
+                calculateChange(); // Call function to calculate change
+            }
+
+            // Calculate change (kembalian)
+            function calculateChange() {
+                const jumlahUang = parseLocaleNumber(document.getElementById('jumlahUang').value) || 0;
+                const totalAmount = parseLocaleNumber(document.getElementById('totalAmountInput').value) || 0;
+
+                const kembalian = jumlahUang - totalAmount;
+
+                document.getElementById('kembalianBelanja').value = kembalian > 0 ? `Rp. ${kembalian.toLocaleString('id-ID')}` : 'Rp. 0';
+            }
+
+            // Handle discount logic
+            document.getElementById('btnTambahDiskon').addEventListener('click', function () {
+                const formDiskon = document.getElementById('formDiskon');
+                if (formDiskon.style.display === 'none') {
+                    formDiskon.style.display = 'block';
+                } else {
+                    formDiskon.style.display = 'none';
+                    document.getElementById('diskon').value = ''; // Clear discount input
+                    discount = 0; // Reset discount to 0 when the form is hidden
+                    updateCartTable(); // Update the cart after clearing the discount
+                }
+            });
+
+            document.getElementById('diskon').addEventListener('input', function () {
+                const diskonInputValue = parseFloat(this.value); // Parse the input value
+                if (isNaN(diskonInputValue) || diskonInputValue < 0 || diskonInputValue > 100) {
+                    // Handle invalid input (non-number or percentage outside 0-100 range)
+                    discount = 0;
+                } else {
+                    // Calculate discount if input is valid
+                    discount = diskonInputValue / 100 * totalBeforeDiscount;
+                }
+                updateCartTable();
+            });
+
+            // Handle jumlah uang input change
+            document.getElementById('jumlahUang').addEventListener('input', function () {
+                calculateChange();
+            });
+
+            // Load cart and discount on page load
+            updateCartTable();
+
+            // Fungsi untuk menghasilkan kode belanja unik
+            function generateKodeBelanja() {
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                let kode = '';
+                for (let i = 0; i < 6; i++) { // Menghasilkan kode sepanjang 6 karakter
+                    kode += characters.charAt(Math.floor(Math.random() * characters.length));
+                }
+                return kode;
+            }
+
+            // Fungsi untuk mendapatkan tanggal hari ini dalam format YYYY-MM-DD
+            function getTodayDate() {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0'); // Bulan 0-11 jadi +1
+                const day = String(today.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            // Mengisi nilai kodeBelanja dan tglBelanja ketika halaman dimuat
+            document.addEventListener('DOMContentLoaded', function () {
+                // Atur nilai kodeBelanja menjadi kode yang dihasilkan
+                document.getElementById('kodeBelanja').value = generateKodeBelanja();
+
+                // Atur nilai tglBelanja menjadi tanggal hari ini
+                document.getElementById('tglBelanja').value = getTodayDate();
+            });
+
+
+            // Handle logout
+            document.getElementById('logoutBtn').addEventListener('click', function () {
+                // Remove user data from localStorage
+                localStorage.removeItem('loggedInUser');
+                // Redirect to login page
+                window.location.href = '../auth/login.html';
+            });
+        </script>
+
+        <script>
+            // Mengambil informasi pengguna dari localStorage
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+            // Menampilkan informasi pengguna di halaman index
+            if (loggedInUser) {
+                // document.getElementById('usernameDisplay').innerText = loggedInUser.username;
+                // document.getElementById('emailDisplay').innerText = loggedInUser.email;
+            } else {
+                // Jika pengguna belum login, redirect ke halaman login
+                window.location.href = '../auth/login.html';
+            }
+        </script>
+
+
+    </body>
+
+</html>
+
+==================== transaksi kasir ====================

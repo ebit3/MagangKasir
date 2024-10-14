@@ -31,19 +31,19 @@
                             <a class="nav-link" href="../user/home.html">Pengguna</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../produk/home.html">Produk</a>
+                            <a class="nav-link active" aria-current="page" href="home.html">Produk</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="home.html">Kategori</a>
+                            <a class="nav-link" href="../kategori/home.html">Kategori</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../transaksi/home.html">Transaksi</a>
+                            <a class="nav-link" href="#">Transaksi</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Laporan</a>
                         </li>
                     </ul>
-                    <form class="d-flex">
+                    <form class="d-flex" role="search">
                         <!-- Tombol Logout -->
                         <button id="logoutBtn" class="btn btn-danger btn-sm">
                             <i class="bi bi-arrow-right-square"></i>
@@ -65,7 +65,7 @@
                     <div class="card">
                         <div class="card-header bg-info p-3"></div>
                         <div class="card-body">
-                            <ul id="categorieInfo" class="list-group list-group-numbered">
+                            <ul id="productInfo" class="list-group list-group-numbered">
                                 <!-- Data produk akan ditampilkan di sini -->
                             </ul>
                         </div>
@@ -107,19 +107,21 @@
             const database = getDatabase(app);
 
             const urlParams = new URLSearchParams(window.location.search);
-            const categorieId = urlParams.get('id');
+            const productID = urlParams.get('id');
 
-            const categorieRef = ref(database, 'categories/' + categorieId);
+            const productRef = ref(database, 'products/' + productID);
 
-            get(categorieRef).then((snapshot) => {
+            get(productRef).then((snapshot) => {
                 if (snapshot.exists()) {
                     const product = snapshot.val();
-                    document.getElementById('categorieInfo').innerHTML = `
-                    <li class="list-group-item border border-0"><strong>Nama Kategori:</strong> ${product.kategori}</li>                    
-                    <li class="list-group-item border-0"><strong>Status Kategori:</strong> ${product.status}</li>                    
+                    document.getElementById('productInfo').innerHTML = `
+                    <li class="list-group-item border border-0"><strong>Nama Produk:</strong> ${product.produk}</li>                    
+                    <li class="list-group-item border border-0"><strong>Harga Produk:</strong> ${product.harga}</li>                    
+                    <li class="list-group-item border border-0"><strong>Kategori Produk:</strong> ${product.kategori}</li>                    
+                    <li class="list-group-item border-0"><strong>Status Produk:</strong> ${product.status}</li>                    
                 `;
                 } else {
-                    alert('Kategori tidak ditemukan!');
+                    alert('Produk tidak ditemukan!');
                     window.location.href = 'home.html';
                 }
             }).catch((error) => {
@@ -127,9 +129,9 @@
             });
 
             document.getElementById('deleteBtn').addEventListener('click', function () {
-                if (confirm('Apakah Anda yakin ingin menghapus Kategori ini?')) {
-                    remove(categorieRef).then(() => {
-                        alert('Kategori berhasil dihapus!');
+                if (confirm('Apakah Anda yakin ingin menghapus Produk ini?')) {
+                    remove(productRef).then(() => {
+                        alert('Produk berhasil dihapus!');
                         window.location.href = 'home.html';
                     }).catch((error) => {
                         console.error('Error:', error);
@@ -160,6 +162,7 @@
                 // Jika pengguna belum login, redirect ke halaman login
                 window.location.href = '../auth/login.html';
             }
+
         </script>
 
     </body>
