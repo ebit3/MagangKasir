@@ -68,14 +68,12 @@ body {
 	}
 
 	.receipt-items {
-		border: 1px solid salmon;
 		padding: 0px 0px !important;
-        
 	}
 
 	.receipt-item .item-details {
 		font-size: 8px;
-		margin-bottom: 2px;
+		margin-bottom: 1px;
 	}
 
 	.receipt-item .item-price {
