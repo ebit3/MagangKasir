@@ -1,0 +1,378 @@
+{
+  "categories": {
+    "-O9DNwEhHmILU6BEIroc": {
+      "kategori": "Tandon",
+      "status": "Aktif"
+    },
+    "-O9DO2RS-RWMviiXo-AL": {
+      "kategori": "WTP (Water Treatment Plant)",
+      "status": "Aktif"
+    },
+    "-O9DOBvarIJ6ZjDYe2xP": {
+      "kategori": "WWTP (Waste Water Treatment Plant)",
+      "status": "Aktif"
+    },
+    "-O9DOH6e-kxeESeBaibl": {
+      "kategori": "Pompa",
+      "status": "Aktif"
+    },
+    "-O9DOM0jkkNn4QIjo2Py": {
+      "kategori": "Sparepart",
+      "status": "Aktif"
+    }
+  },
+  "products": {
+    "-O9DOkN1ppQMsSSHbU2s": {
+      "harga": "24000000",
+      "kategori": "WTP (Water Treatment Plant)",
+      "produk": "Depo Isi Ulang Water Flash",
+      "status": "Ada"
+    },
+    "-O9DPFApMdwsyKu4BXVh": {
+      "harga": "5000000",
+      "kategori": "WTP (Water Treatment Plant)",
+      "produk": "Mesin RO 1000 Gpd",
+      "status": "Ada"
+    },
+    "-O9DPewLz-VstZKtmKCR": {
+      "harga": "4800000",
+      "kategori": "WTP (Water Treatment Plant)",
+      "produk": "Paket Filter Kolam Renang",
+      "status": "Ada"
+    },
+    "-O9DQ4kQhKlKz8SvjyHW": {
+      "harga": "50000",
+      "kategori": "Tandon",
+      "produk": "Galon PC 19 Liter",
+      "status": "Ada"
+    },
+    "-O9DQTkBEau3RLilDsFq": {
+      "harga": "130000",
+      "kategori": "Sparepart",
+      "produk": "Hosing 10 Inc",
+      "status": "Ada"
+    },
+    "-O9DQgZKzRcuKCe8uqdO": {
+      "harga": "20500",
+      "kategori": "Sparepart",
+      "produk": "Ozon 20 grm/jam",
+      "status": "Ada"
+    },
+    "-O9DR1NC6JWFynlht8OT": {
+      "harga": "6000000",
+      "kategori": "Tandon",
+      "produk": "Tandon 5300 Liter",
+      "status": "Ada"
+    },
+    "-O9DRIMGcYsGingS6tbB": {
+      "harga": "10000000",
+      "kategori": "WTP (Water Treatment Plant)",
+      "produk": "Rak KBU",
+      "status": "Ada"
+    },
+    "-O9DRTLwo5OOHycVRURe": {
+      "harga": "500000",
+      "kategori": "Sparepart",
+      "produk": "Sikat Galon ",
+      "status": "Ada"
+    },
+    "-O9DRbNL_vSnl5zshWMa": {
+      "harga": "5000000",
+      "kategori": "Sparepart",
+      "produk": "Mesin RO Portabel",
+      "status": "Ada"
+    },
+    "-O9DRm_VoY7OGvI9xTop": {
+      "harga": "45000",
+      "kategori": "Sparepart",
+      "produk": "Aneka Carbon 10 Inc",
+      "status": "Ada"
+    },
+    "-O9DS5aVViMDUj9tnjZl": {
+      "harga": "22000000",
+      "kategori": "WTP (Water Treatment Plant)",
+      "produk": "Depo Isi Ulang Bio Energy",
+      "status": "Ada"
+    },
+    "-O9DSG3y5lmVAwVoCHfH": {
+      "harga": "950000",
+      "kategori": "Pompa",
+      "produk": "Pompa Diafragma HF50L",
+      "status": "Ada"
+    },
+    "-O9DSUQoHg85TC7qpms7": {
+      "harga": "2250000",
+      "kategori": "Sparepart",
+      "produk": "Tabung Filter Makro 1054 Rumah Tangga ",
+      "status": "Ada"
+    },
+    "-O9DSeh5qDfAlaZsVdm9": {
+      "harga": "100000",
+      "kategori": "Sparepart",
+      "produk": "Hosing Filter 10",
+      "status": "Ada"
+    },
+    "-O9DT0_freHKYx-IJ0P0": {
+      "harga": "650000",
+      "kategori": "WTP (Water Treatment Plant)",
+      "produk": "Kaporit Kolam Renang",
+      "status": "Ada"
+    },
+    "-O9DUWyHWpX9lIpVqAd2": {
+      "harga": "4000000",
+      "kategori": "Sparepart",
+      "produk": "Mesin Ro 2000Gpd dan 4000Gpd",
+      "status": "Ada"
+    },
+    "-O9DUq741xe6iaXfx6MK": {
+      "harga": "500000",
+      "kategori": "Sparepart",
+      "produk": "Tawas (Aluminium Sulfate) 50 KG",
+      "status": "Ada"
+    },
+    "-O9DVGinDVY7LlI4skas": {
+      "harga": "2500000",
+      "kategori": "Sparepart",
+      "produk": "Filter 1054 SS",
+      "status": "Ada"
+    },
+    "-O9DVTCRFz-2SduLvGMP": {
+      "harga": "25000000",
+      "kategori": "Sparepart",
+      "produk": "Ozon Generator (harga Tergantung Gramasi) ",
+      "status": "Ada"
+    },
+    "-O9DViAacFGD3LoUGrOB": {
+      "harga": "25000000",
+      "kategori": "WWTP (Waste Water Treatment Plant)",
+      "produk": "Depo Air Minum",
+      "status": "Ada"
+    },
+    "-O9DW9IYvhU8Fpe1gx2U": {
+      "harga": "1110000",
+      "kategori": "WTP (Water Treatment Plant)",
+      "produk": "IPAL WTP 1m3",
+      "status": "Ada"
+    },
+    "-O9DWUrdEvtM4gV8ihYO": {
+      "harga": "400000",
+      "kategori": "Sparepart",
+      "produk": "Grease Trap",
+      "status": "Ada"
+    },
+    "-O9DWf9fyHj4QtJ3eGJT": {
+      "harga": "26000000",
+      "kategori": "WWTP (Waste Water Treatment Plant)",
+      "produk": "Depo Isi Ulang Paket Mineral + Bio",
+      "status": "Ada"
+    },
+    "-O9DWrcFTGsdHRN53rIs": {
+      "harga": "60000",
+      "kategori": "WTP (Water Treatment Plant)",
+      "produk": "Terusi",
+      "status": "Ada"
+    },
+    "-O9DX4tcGA7f1oJZaEIy": {
+      "harga": "800000",
+      "kategori": "WTP (Water Treatment Plant)",
+      "produk": "Karbon Aktif aneka merek",
+      "status": "Ada"
+    },
+    "-O9DXIKCMAoLMRVZakzC": {
+      "harga": "250000",
+      "kategori": "Sparepart",
+      "produk": "Hosing Filter Mikro 20",
+      "status": "Ada"
+    },
+    "-O9DXS9oDfJl8jBF1lzq": {
+      "harga": "60000",
+      "kategori": "Sparepart",
+      "produk": "Solenoid ( Harga Menyesuaikan Merk)",
+      "status": "Ada"
+    },
+    "-O9DXf44aFu7637mZb8N": {
+      "harga": "350000",
+      "kategori": "Sparepart",
+      "produk": "PAC ( harga Per Package)",
+      "status": "Ada"
+    },
+    "-O9DXq8kouiN7zgs5s7E": {
+      "harga": "450000",
+      "kategori": "Sparepart",
+      "produk": "Ballas Ultraviolet ",
+      "status": "Ada"
+    },
+    "-O9DY039Karg3srxZDht": {
+      "harga": "480000",
+      "kategori": "Tandon",
+      "produk": "Tandon 250 Liter ",
+      "status": "Ada"
+    },
+    "-O9DYENy7dLojXFgA342": {
+      "harga": "550000",
+      "kategori": "Tandon",
+      "produk": "Tandon 350",
+      "status": "Ada"
+    },
+    "-O9DYS80XPDG5favKOgd": {
+      "harga": "7000",
+      "kategori": "Sparepart",
+      "produk": "HCL Curah ( Per liter )",
+      "status": "Ada"
+    },
+    "-O9DYb3GkR5_N5Ad-x-7": {
+      "harga": "3000000",
+      "kategori": "Sparepart",
+      "produk": "Tabung Reaktor IPAL ",
+      "status": "Ada"
+    },
+    "-O9DYlrxoraU5EQIHXr9": {
+      "harga": "2500000",
+      "kategori": "Tandon",
+      "produk": "Tandon Stailesstell",
+      "status": "Ada"
+    },
+    "-O9DYxI1B5FFw5S50aAV": {
+      "harga": "100000",
+      "kategori": "Sparepart",
+      "produk": "Tabung Filter Allsize",
+      "status": "Ada"
+    },
+    "-O9DZ7h0BkK_US1yNHhs": {
+      "harga": "850000",
+      "kategori": "Tandon",
+      "produk": "Tandon 550 Liter ",
+      "status": "Ada"
+    },
+    "-O9DZmDk8-OnwnHFVHZb": {
+      "harga": "145000000",
+      "kategori": "Sparepart",
+      "produk": "Mesin Penghasil Es Batu 1000 Kg",
+      "status": "Ada"
+    },
+    "-O9D_cdc5XFYGNSBZMGd": {
+      "harga": "235000000",
+      "kategori": "Sparepart",
+      "produk": "Mesin Penghasil Es batu 2000 KG /Hari",
+      "status": "Ada"
+    },
+    "-O9Da34nWixwN56ICgY-": {
+      "harga": "340000000",
+      "kategori": "Sparepart",
+      "produk": "Mesin Penghasil Es Batu 3000 KG",
+      "status": "Ada"
+    },
+    "-O9DaD08OYTga4NSg7Mb": {
+      "harga": "480000000",
+      "kategori": "Sparepart",
+      "produk": "Mesin Penghasil Es Batu 5000 Kg",
+      "status": "Ada"
+    },
+    "-O9DbIZPxMgI2DSHatb_": {
+      "harga": "7900000",
+      "kategori": "Tandon",
+      "produk": "Tandon 5100 L Penguin",
+      "status": "Ada"
+    },
+    "-O9DkIodRIF_iwY3RBP_": {
+      "harga": "12000000",
+      "kategori": "Sparepart",
+      "produk": "Filter Demineral cation anion",
+      "status": "Ada"
+    },
+    "-O9DpekN4Ac4BI8zS0iP": {
+      "harga": "350000000",
+      "kategori": "Sparepart",
+      "produk": "Filter Air",
+      "status": "Ada"
+    },
+    "-O9DppIP4aHDfiiynITm": {
+      "harga": "2500000",
+      "kategori": "Sparepart",
+      "produk": "Mesin RO 100 GPD",
+      "status": "Ada"
+    }
+  },
+  "transactions": {
+    "-ODOsVI0fltH4XYlzmoY": {
+      "cartItems": [
+        {
+          "harga": "24000000",
+          "id": "-O9DOkN1ppQMsSSHbU2s",
+          "kategori": "WTP (Water Treatment Plant)",
+          "produk": "Depo Isi Ulang Water Flash",
+          "qty": 1,
+          "status": "Ada",
+          "subtotal": 24000000
+        },
+        {
+          "harga": "500000",
+          "id": "-O9DRTLwo5OOHycVRURe",
+          "kategori": "Sparepart",
+          "produk": "Sikat Galon ",
+          "qty": 2,
+          "status": "Ada",
+          "subtotal": 1000000
+        }
+      ],
+      "createdAt": "2024-12-06T02:52:26.696Z",
+      "diskon": 90,
+      "jumlahUang": 3000000,
+      "kembalianBelanja": 500000,
+      "kodeBelanja": "TRX-36RRG9SG",
+      "tglBelanja": "2024-12-06",
+      "totalAmount": 2500000,
+      "totalBeforeDiscount": 25000000
+    },
+    "-ODOs_JSXaY9glg7L8Ds": {
+      "cartItems": [
+        {
+          "harga": "500000",
+          "id": "-O9DRTLwo5OOHycVRURe",
+          "kategori": "Sparepart",
+          "produk": "Sikat Galon ",
+          "qty": 1,
+          "status": "Ada",
+          "subtotal": 500000
+        },
+        {
+          "harga": "100000",
+          "id": "-O9DYxI1B5FFw5S50aAV",
+          "kategori": "Sparepart",
+          "produk": "Tabung Filter Allsize",
+          "qty": 2,
+          "status": "Ada",
+          "subtotal": 200000
+        }
+      ],
+      "createdAt": "2024-12-06T02:52:47.256Z",
+      "diskon": 0,
+      "jumlahUang": 800000,
+      "kembalianBelanja": 100000,
+      "kodeBelanja": "TRX-NG8IIEZ8",
+      "tglBelanja": "2024-12-06",
+      "totalAmount": 700000,
+      "totalBeforeDiscount": 700000
+    }
+  },
+  "users": {
+    "admin": {
+      "email": "admin@gmail.com",
+      "password": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
+      "role": "admin",
+      "username": "admin"
+    },
+    "kasir": {
+      "email": "kasir@gmail.com",
+      "password": "2c7ee7ade401a7cef9ef4dad9978998cf42ed805243d6c91f89408c6097aa571",
+      "role": "kasir",
+      "username": "kasir"
+    },
+    "kasir2": {
+      "email": "kasir2@gmail.com",
+      "password": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+      "role": "kasir",
+      "username": "kasir2"
+    }
+  }
+}

@@ -6,9 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dashboard Kasir</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
         <link rel="stylesheet" href="../assets/dist/css/index.css">
-
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     </head>
 
@@ -37,10 +35,10 @@
                             <a class="nav-link" href="../kategori/home.html">Kategori</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="home.html" aria-current="page">Transaksi</a>
+                            <a class="nav-link active" aria-current="page" href="home.html">Belanja</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Laporan</a>
+                            <a class="nav-link" href="../laporan/home.html">Laporan</a>
                         </li>
                     </ul>
                     <form class="d-flex">
@@ -60,35 +58,28 @@
             </div>
 
             <div class="row mt-4 justify-content-center">
+                <!-- Form Tambah Produk -->
                 <div class="col-md-12 col-lg-12 mb-4">
-                    <form action="" method="post">
+                    <form action="" method="post" id="addProductForm">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row align-items-end">
-                                    <!-- Input Produk -->
-                                    <div class="col-md-5">
+                                    <div class="col-lg-5 col-md-4">
                                         <div class="mb-3">
                                             <label for="produk" class="form-label">Nama Produk</label>
-                                            <select name="produk" id="produk" class="form-select">
+                                            <select name="produk" id="productSelect" class="form-select">
                                                 <option selected>Pilih Produk...</option>
-                                                <option value="3000">Produk 1 (Rp 3.000)</option>
-                                                <option value="9000">Produk 2 (Rp 9.000)</option>
-                                                <option value="2000">Produk 3 (Rp 2.000)</option>
                                             </select>
                                         </div>
                                     </div>
-
-                                    <!-- Input Quantity -->
-                                    <div class="col-md-5">
+                                    <div class="col-lg-5 col-md-4">
                                         <div class="mb-3">
                                             <label for="qty" class="form-label">Jumlah Barang</label>
-                                            <input type="number" name="qty" id="qty" class="form-control" required
-                                                placeholder="Masukkan jumlah barang">
+                                            <input type="number" name="qty" id="productQuantity" class="form-control"
+                                                required placeholder="Masukkan jumlah barang">
                                         </div>
                                     </div>
-
-                                    <!-- Tombol Submit -->
-                                    <div class="col-md-2">
+                                    <div class="col-lg-2 col-md-4">
                                         <div class="mb-3">
                                             <button class="btn btn-primary fw-semibold w-100" type="submit"
                                                 name="submit">
@@ -103,12 +94,10 @@
                     </form>
                 </div>
 
-                <!-- Cart Table -->
+                <!-- Tabel Keranjang -->
                 <div class="col-md-7 col-lg-7 mb-4">
                     <div class="card">
-                        <div class="card-header bg-primary p-3 text-white">
-                            Keranjang Belanja
-                        </div>
+                        <div class="card-header bg-primary p-3 text-white">Keranjang Belanja</div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table caption-top align-middle">
@@ -122,13 +111,11 @@
                                             <th scope="col">Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <!-- Isi keranjang akan dirender di sini -->
-                                    </tbody>
+                                    <tbody id="cartTableBody"></tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="3" class="text-end fw-bold">Total</td>
-                                            <td colspan="2" class="fw-bold" id="totalBelanja">Rp 0</td>
+                                            <td colspan="3" class="text-end fw-bold h4">Total : </td>
+                                            <td colspan="2" class="fw-bold h4" id="totalAmountTable"></td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -140,60 +127,41 @@
                 <!-- Detail Belanja -->
                 <div class="col-md-5 col-lg-5 mb-4">
                     <div class="card">
-                        <div class="card-header bg-primary p-3 text-white">
-                            Detail Belanja
-                        </div>
+                        <div class="card-header bg-primary p-3 text-white">Detail Belanja</div>
                         <div class="card-body">
-                            <!-- Kode Belanja -->
                             <div class="mb-3">
                                 <label for="kodeBelanja" class="form-label">Kode Belanja</label>
-                                <input type="text" name="kode" id="kodeBelanja" class="form-control" value="xysjsm"
-                                    disabled>
+                                <input type="text" name="kode" id="kodeBelanja" class="form-control" disabled>
                             </div>
-
-                            <!-- Tanggal Belanja -->
                             <div class="mb-3">
                                 <label for="tglBelanja" class="form-label">Tanggal Belanja</label>
-                                <input type="date" name="tgl" id="tglBelanja" class="form-control" value="2024-09-05"
-                                    disabled>
+                                <input type="date" name="tgl" id="tglBelanja" class="form-control" disabled>
                             </div>
-
-                            <!-- Tombol untuk menambah diskon -->
                             <div class="mb-3">
                                 <button id="btnTambahDiskon" class="btn btn-outline-primary btn-sm">Tambahkan
                                     Diskon</button>
                             </div>
-
-                            <!-- Input Form Diskon (tersembunyi secara default) -->
                             <div id="formDiskon" class="mb-3" style="display: none;">
                                 <label for="diskon" class="form-label">Diskon (%)</label>
                                 <input type="number" name="diskon" id="diskon" class="form-control"
                                     placeholder="Masukkan diskon">
                             </div>
-
-                            <!-- Total Belanja -->
                             <div class="mb-3">
                                 <label for="totalBelanjaInput" class="form-label">Total Belanja</label>
-                                <input type="text" name="total" id="totalBelanjaInput" class="form-control" value="0"
-                                    disabled>
+                                <input type="text" name="total" id="totalAmountInput" class="form-control" readonly>
                             </div>
-
-                            <!-- Jumlah Uang -->
                             <div class="mb-3">
                                 <label for="jumlahUang" class="form-label">Jumlah Uang</label>
-                                <input type="text" name="jumlahUang" id="jumlahUang" class="form-control" value="0">
+                                <input type="text" name="jumlahUang" id="jumlahUang" class="form-control"
+                                    placeholder="0">
                             </div>
-
-                            <!-- Kembalian -->
                             <div class="mb-3">
                                 <label for="kembalianBelanja" class="form-label">Kembalian Belanja</label>
-                                <input type="text" name="kembalian" id="kembalianBelanja" class="form-control" value="0"
-                                    disabled>
+                                <input type="text" name="kembalian" id="kembalianBelanja" class="form-control"
+                                    value="Rp. 0" disabled>
                             </div>
-
-                            <!-- Tombol Selesai Belanja -->
                             <div class="d-grid">
-                                <button class="btn btn-primary">Selesai Belanja</button>
+                                <button class="btn btn-primary" id="btnTransaksi">Selesai Belanja</button>
                             </div>
                         </div>
                     </div>
@@ -201,7 +169,6 @@
             </div>
         </div>
 
-        <!-- Footer -->
         <footer>
             <p>&copy; 2024 Muji Perkasa. All Rights Reserved.</p>
         </footer>
@@ -209,112 +176,236 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
         <script type="module">
+            // Firebase initialization and loading products
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+            import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
 
-            // Inisialisasi variabel untuk menampung keranjang belanja
-            let cart = [];
+            const firebaseConfig = {
+                apiKey: "AIzaSyBatww_KyYImYgZNRfgkBnagqQcNYA-yA",
+                authDomain: "dbkasir-f7cc3.firebaseapp.com",
+                databaseURL: "https://dbkasir-f7cc3-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "dbkasir-f7cc3",
+                storageBucket: "dbkasir-f7cc3.appspot.com",
+                messagingSenderId: "179332456815",
+                appId: "1:179332456815:web:ae2620d7f651b1519e489a",
+                measurementId: "G-MC9Q4FC6J7"
+            };
 
-            // Fungsi untuk memuat data keranjang dari localStorage
-            function loadCart() {
-                const storedCart = localStorage.getItem('cart');
-                if (storedCart) {
-                    cart = JSON.parse(storedCart);
-                    renderCart();
-                }
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+            const productSelect = document.getElementById('productSelect');
+            let products = [];
+
+            function formatRupiah(angka) {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(angka).replace('Rp', ''); // Menghilangkan simbol 'Rp' jika tidak diinginkan
             }
 
-            // Fungsi untuk menyimpan keranjang ke localStorage
-            function saveCart() {
+            function loadProducts() {
+                const productsRef = ref(database, 'products');
+                onValue(productsRef, (snapshot) => {
+                    products = [];
+                    productSelect.innerHTML = ''; // Bersihkan opsi produk sebelum diisi
+                    snapshot.forEach((childSnapshot) => {
+                        const product = childSnapshot.val();
+
+                        // Hanya tambahkan produk jika statusnya "Ada"
+                        if (product.status === "Ada") {
+                            products.push({ id: childSnapshot.key, ...product });
+                            const option = document.createElement('option');
+                            option.value = childSnapshot.key;
+
+                            // Format harga menjadi format rupiah
+                            const hargaFormatted = formatRupiah(product.harga);
+                            option.text = `${product.produk} (Rp. ${hargaFormatted})`;
+                            productSelect.appendChild(option);
+                        }
+                    });
+                });
+            }
+
+            loadProducts();
+
+            // Handle cart and calculations
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            // let discount = parseFloat(localStorage.getItem('discount')) || 0;
+            let discount = parseFloat('discount') || 0;
+            let totalBeforeDiscount = parseFloat(localStorage.getItem('totalBeforeDiscount')) || 0;
+
+            function parseLocaleNumber(stringNumber) {
+                if (typeof stringNumber === 'string') {
+                    return parseFloat(stringNumber.replace(/Rp\.|\./g, '').replace(/,/g, '.')) || 0;
+                }
+                return stringNumber;
+            }
+
+            function updateCartTable() {
+                const cartTableBody = document.getElementById('cartTableBody');
+                const totalAmountTable = document.getElementById('totalAmountTable');
+                const totalAmountInput = document.getElementById('totalAmountInput');
+                cartTableBody.innerHTML = ''; // Kosongkan tabel sebelum mengisinya kembali
+                totalBeforeDiscount = 0; // Reset total sebelum diskon
+
+                cart.forEach((item, index) => {
+                    const subtotal = parseLocaleNumber(item.harga) * item.qty; // Hitung subtotal untuk setiap produk
+                    totalBeforeDiscount += subtotal; // Tambahkan subtotal ke total sebelum diskon
+
+                    // Tambahkan baris ke dalam tabel untuk setiap item di keranjang
+                    cartTableBody.innerHTML += `
+        <tr>
+            <td>${item.produk}</td>
+            <td>${Number(item.harga).toLocaleString('id-ID')}</td>
+            <td>${item.qty}</td>
+            <td>${subtotal.toLocaleString('id-ID')}</td>
+            <td><button class="btn btn-sm btn-danger" onclick="removeItem(${index})">
+                <i class="bi bi-trash"></i>
+                </button></td>
+        </tr>
+        `;
+                });
+
+                // Hitung diskon dan total setelah diskon
+                const discountValue = (totalBeforeDiscount * discount) / 100;
+                const totalAfterDiscount = totalBeforeDiscount - discountValue;
+
+                // Update nilai total pada tabel dan input
+                totalAmountTable.textContent = `Rp. ${totalAfterDiscount.toLocaleString('id-ID')}`;
+                totalAmountInput.value = `Rp. ${totalAfterDiscount.toLocaleString('id-ID')}`;
+
+                // Simpan keranjang dan total sebelum diskon ke localStorage
+                localStorage.setItem('totalBeforeDiscount', totalBeforeDiscount);
                 localStorage.setItem('cart', JSON.stringify(cart));
             }
 
-            // Fungsi untuk menampilkan keranjang belanja di tabel
-            function renderCart() {
-                const tableBody = document.querySelector('tbody');
-                tableBody.innerHTML = ''; // Kosongkan isi tabel sebelum di-render ulang
-                let total = 0;
 
-                cart.forEach((item, index) => {
-                    const subtotal = item.harga * item.qty;
-                    total += subtotal;
-
-                    const row = `
-                    <tr>
-                        <td>${item.nama}</td>
-                        <td>Rp ${item.harga.toLocaleString()}</td>
-                        <td>${item.qty}</td>
-                        <td>Rp ${subtotal.toLocaleString()}</td>
-                        <td>
-                            <button class="btn btn-sm btn-danger" onclick="removeItem(${index})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-                    tableBody.insertAdjacentHTML('beforeend', row);
-                });
-
-                // Update total belanja di bagian detail belanja
-                document.getElementById('totalBelanja').textContent = `Rp ${total.toLocaleString()}`;
-                document.getElementById('totalBelanjaInput').value = total.toLocaleString();
-                calculateChange(); // Hitung kembalian
+            function calculateChange() {
+                const jumlahUang = parseLocaleNumber(document.getElementById('jumlahUang').value);
+                const totalAmount = parseLocaleNumber(document.getElementById('totalAmountInput').value);
+                const change = jumlahUang - totalAmount;
+                document.getElementById('kembalianBelanja').value = `Rp. ${change.toLocaleString('id-ID')}`;
             }
 
-            // Fungsi untuk menambah produk ke keranjang
-            document.querySelector('form').addEventListener('submit', function (e) {
+            // Remove product from cart
+            window.removeItem = function (index) {
+                cart.splice(index, 1);
+                localStorage.setItem('cart', JSON.stringify(cart)); // Update localStorage after removal
+                updateCartTable();
+            };
+
+            document.getElementById('addProductForm').addEventListener('submit', function (e) {
                 e.preventDefault();
+                const selectedProductId = productSelect.value;
+                const qtyInput = document.getElementById('productQuantity');
+                const qty = parseInt(qtyInput.value); // Pastikan nilai qty berupa integer
 
-                const produkSelect = document.getElementById('produk');
-                const qtyInput = document.getElementById('qty');
+                if (selectedProductId && qty) {
+                    const existingProduct = cart.find(p => p.id === selectedProductId);
+                    if (existingProduct) {
+                        // Jika produk sudah ada, tambahkan qty
+                        existingProduct.qty += qty;
+                    } else {
+                        // Jika produk belum ada, tambahkan sebagai produk baru ke dalam cart
+                        const product = products.find(p => p.id === selectedProductId);
+                        cart.push({ ...product, qty });
+                    }
+                    updateCartTable();
 
-                const produkNama = produkSelect.options[produkSelect.selectedIndex].text;
-                const produkHarga = parseInt(produkSelect.value);
-                const qty = parseInt(qtyInput.value);
-
-                // Cek jika qty lebih dari 0
-                if (qty > 0) {
-                    const newItem = {
-                        nama: produkNama,
-                        harga: produkHarga,
-                        qty: qty
-                    };
-                    cart.push(newItem); // Tambahkan ke keranjang
-                    saveCart(); // Simpan keranjang ke localStorage
-                    renderCart(); // Render ulang keranjang
+                    // Kosongkan input quantity setelah produk ditambahkan
+                    qtyInput.value = '';
                 }
-
-                // Reset form
-                produkSelect.selectedIndex = 0;
-                qtyInput.value = '';
             });
 
-            // Fungsi untuk menghapus item dari keranjang
-            function removeItem(index) {
-                cart.splice(index, 1); // Hapus item berdasarkan index
-                saveCart(); // Simpan perubahan ke localStorage
-                renderCart(); // Render ulang keranjang
-            }
-
-            // Fungsi untuk menghitung kembalian
-            document.getElementById('jumlahUang').addEventListener('input', calculateChange);
-            function calculateChange() {
-                const totalBelanja = parseInt(document.getElementById('totalBelanjaInput').value.replace(/\./g, '')) || 0;
-                const jumlahUang = parseInt(document.getElementById('jumlahUang').value) || 0;
-                const kembalian = jumlahUang - totalBelanja;
-                document.getElementById('kembalianBelanja').value = kembalian > 0 ? kembalian.toLocaleString() : '0';
-            }
-
-            // Fungsi untuk menampilkan/menyembunyikan form diskon
             document.getElementById('btnTambahDiskon').addEventListener('click', function () {
                 const formDiskon = document.getElementById('formDiskon');
-                if (formDiskon.style.display === 'none') {
-                    formDiskon.style.display = 'block';
-                } else {
-                    formDiskon.style.display = 'none';
-                }
+                formDiskon.style.display = formDiskon.style.display === 'none' ? 'block' : 'none';
             });
 
-            // Muat keranjang dari localStorage saat halaman dimuat
-            loadCart();
+            document.getElementById('diskon').addEventListener('input', function (e) {
+                discount = parseFloat(e.target.value) || 0;
+                localStorage.setItem('discount', discount);
+                updateCartTable();
+            });
+
+            document.getElementById('jumlahUang').addEventListener('input', calculateChange);
+
+            document.getElementById('kodeBelanja').value = generateKodeBelanja();
+            document.getElementById('tglBelanja').value = getTodayDate();
+
+            function generateKodeBelanja() {
+                const randomCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+                return `TRX-${randomCode}`;
+            }
+
+            function getTodayDate() {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            updateCartTable();
+
+            function saveTransaction() {
+                // Ambil data transaksi dari halaman
+                const kodeBelanja = document.getElementById('kodeBelanja').value;
+                const tglBelanja = document.getElementById('tglBelanja').value;
+                const totalAmount = parseLocaleNumber(document.getElementById('totalAmountInput').value);
+                const jumlahUang = parseLocaleNumber(document.getElementById('jumlahUang').value);
+                const kembalianBelanja = parseLocaleNumber(document.getElementById('kembalianBelanja').value);
+                const diskon = parseFloat(document.getElementById('diskon').value) || 0;
+
+                // Menghitung subtotal untuk setiap item di cart
+                const updatedCartItems = cart.map(item => ({
+                    ...item,
+                    subtotal: parseFloat(item.harga) * item.qty // Menghitung subtotal
+                }));
+
+                // Membuat objek transaksi
+                const transactionData = {
+                    kodeBelanja,
+                    tglBelanja,
+                    totalAmount,
+                    jumlahUang,
+                    kembalianBelanja,
+                    diskon,
+                    totalBeforeDiscount,
+                    cartItems: updatedCartItems, // Keranjang belanja yang berisi item dengan subtotal
+                    createdAt: new Date().toISOString(), // Waktu saat transaksi disimpan
+                };
+
+                // Simpan ke Firebase
+                const transactionsRef = ref(database, 'transactions'); // Koleksi 'transactions'
+                const newTransactionRef = push(transactionsRef); // Membuat node baru
+                set(newTransactionRef, transactionData)
+                    .then(() => {
+                        // Berhasil menyimpan transaksi
+                        alert('Transaksi berhasil disimpan!');
+
+                        // Simpan cartItems ke localStorage atau sessionStorage untuk diakses di halaman detail
+                        localStorage.setItem('lastTransaction', JSON.stringify(transactionData));
+
+                        // Redirect ke halaman detail transaksi
+                        window.location.href = `transactionDetail.html?kodeBelanja=${kodeBelanja}`;
+
+
+                        // Reset keranjang dan form setelah selesai transaksi
+                        cart = [];
+                        localStorage.removeItem('cart'); // Hapus keranjang dari localStorage
+                        updateCartTable();
+                    })
+                    .catch((error) => {
+                        console.error('Error menyimpan transaksi: ', error);
+                    });
+            }
+
+            // Tambahkan event listener untuk tombol "Selesai Belanja"    
+            document.getElementById('btnTransaksi').addEventListener('click', function () {
+                saveTransaction();
+            });
 
             // Check if user is logged in
             const loggedInUser = sessionStorage.getItem('loggedInUser');
@@ -340,7 +431,6 @@
             document.getElementById('logoutBtn').addEventListener('click', logout);
 
         </script>
-
     </body>
 
 </html>

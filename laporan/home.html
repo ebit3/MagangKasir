@@ -34,13 +34,13 @@
                             <a class="nav-link" href="../produk/home.html">Produk</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="home.html">Kategori</a>
+                            <a class="nav-link" href="../kategori/home.html">Kategori</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../transaksi/home.html">Belanja</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../laporan/home.html">Laporan</a>
+                            <a class="nav-link active" aria-current="page" href="home.html">Laporan</a>
                         </li>
                     </ul>
                     <form class="d-flex">
@@ -56,21 +56,23 @@
         <!-- Main Content -->
         <div class="container mt-5">
             <div class="row text-center">
-                <h1>Data Kategori</h1>
+                <h1>Data Transaksi</h1>
             </div>
 
             <div class="row mt-4 justify-content-center">
-                <!-- Kategori Table -->
+                <div class="col-md-6 mb-3">
+                    <div class="input-group">
+                        <input type="text" id="searchInput" class="form-control"
+                            placeholder="Cari berdasarkan kode belanja">
+                        <button id="searchBtn" class="btn btn-primary">
+                            <i class="bi bi-search"></i> Cari
+                        </button>
+                    </div>
+                </div>
+                <!-- Transaksi Table -->
                 <div class="col-md-12 col-lg-12 mb-4">
                     <div class="card">
-                        <div class="card-header bg-white p-3">
-                            <a href="tambah.html" class="text-primary text-decoration-none fw-bold">
-                                <span>
-                                    <i class="bi bi-plus-lg"></i>
-                                </span>
-                                Tambah Kategori
-                            </a>
-                        </div>
+                        <div class="card-header bg-white p-3"></div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table caption-top">
@@ -80,32 +82,26 @@
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </span>
-                                        Hapus Semua Kategori
+                                        Hapus Semua Data Belanja
                                     </caption>
                                     <thead>
                                         <tr>
-                                            <th scope="col">Kategori</th>
-                                            <th scope="col">Status</th>
+                                            <th scope="col">Kode Belanja</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tableCategorieBody">
+                                    <tbody id="tableTransactionsBody">
 
                                     </tbody>
                                 </table>
 
                                 <!-- Template for category row -->
-                                <template id="categorie-template">
+                                <template id="transaction-template">
                                     <tr>
-                                        <td class="row-categorie"></td>
-                                        <td class="row-status"></td>
+                                        <td class="row-codeTransaction"></td>
                                         <td>
-                                            <a href="hapus.html" class="btn btn-sm btn-danger delete-link">
-                                                <i class="bi bi-trash"></i>
-                                            </a>
-                                            |
-                                            <a href="edit.html" class="btn btn-sm btn-warning edit-link">
-                                                <i class="bi bi-pencil-square"></i>
+                                            <a href="hapus.html" class="btn btn-sm btn-info delete-link">
+                                                <i class="bi bi-eye-fill"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -172,56 +168,47 @@
                 }
             }
 
-            const tableCategorieBody = document.getElementById('tableCategorieBody');
-            const template = document.getElementById('categorie-template').content;
+            const tableTransactionsBody = document.getElementById('tableTransactionsBody');
+            const template = document.getElementById('transaction-template').content;
 
             function loadData() {
                 // Gunakan orderByChild untuk mengurutkan data berdasarkan abjad (kategori)
-                const categoriesRef = query(ref(database, 'categories'), orderByChild('kategori'));
+                const transactionRef = query(ref(database, 'transactions'), orderByChild('kodeBelanja'));
 
-                onValue(categoriesRef, (snapshot) => {
-                    tableCategorieBody.innerHTML = ''; // Bersihkan data yang ada
+                onValue(transactionRef, (snapshot) => {
+                    tableTransactionsBody.innerHTML = ''; // Bersihkan data yang ada
 
                     if (!snapshot.exists()) {
                         // Jika tidak ada data yang tersedia
-                        tableCategorieBody.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada kategori yang tersedia</td></tr>';
+                        tableTransactionsBody.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada data belanja yang tersedia</td></tr>';
                         return;
                     }
 
-                    const categories = [];
+                    const transactions = [];
                     snapshot.forEach((childSnapshot) => {
-                        const category = { id: childSnapshot.key, ...childSnapshot.val() };
-                        categories.push(category); // Tambahkan data ke array
+                        const transaction = { id: childSnapshot.key, ...childSnapshot.val() };
+                        transactions.push(transaction); // Tambahkan data ke array
                     });
 
-                    const totalItems = categories.length; // Total kategori
+                    const totalItems = transactions.length; // Total transaksi
                     renderPagination(totalItems); // Render navigasi pagination
 
                     // Ambil data sesuai halaman saat ini
                     const startIndex = (currentPage - 1) * itemsPerPage;
                     const endIndex = startIndex + itemsPerPage;
-                    const paginatedCategories = categories.slice(startIndex, endIndex);
+                    const paginatedTransaction = transactions.slice(startIndex, endIndex);
 
-                    paginatedCategories.forEach((category) => {
+                    paginatedTransaction.forEach((transaction) => {
                         const clone = document.importNode(template, true);
 
-                        // Isi template dengan data kategori
-                        clone.querySelector('.row-categorie').textContent = category.kategori;
-
-                        // Kondisi untuk menentukan status dan class badge
-                        const statusElement = clone.querySelector('.row-status');
-                        if (category.status === 'Aktif') {
-                            statusElement.innerHTML = '<span class="badge rounded-pill text-bg-primary px-3">Aktif</span>';
-                        } else if (category.status === 'Tidak aktif') {
-                            statusElement.innerHTML = '<span class="badge rounded-pill text-bg-danger px-3">Tidak Aktif</span>';
-                        }
+                        // Isi template dengan data transaksi
+                        clone.querySelector('.row-codeTransaction').textContent = transaction.kodeBelanja;
 
                         // Isi data lainnya
-                        clone.querySelector('.edit-link').href = `edit.html?id=${category.id}`;
-                        clone.querySelector('.delete-link').href = `hapus.html?id=${category.id}`;
+                        clone.querySelector('.delete-link').href = `hapus.html?id=${transaction.id}`;
 
                         // Tambahkan baris yang sudah diisi ke dalam table body
-                        tableCategorieBody.appendChild(clone);
+                        tableTransactionsBody.appendChild(clone);
                     });
                 });
             }
@@ -229,16 +216,76 @@
             loadData();
 
             // delete all
-            const categorieRef = ref(database, 'categories');
+            const transactionRef = ref(database, 'transactions');
 
             document.getElementById('deleteBtn').addEventListener('click', function () {
-                if (confirm('Apakah Anda yakin ingin menghapus semua Kategori ini?')) {
-                    remove(categorieRef).then(() => {
-                        alert('Kategori berhasil dihapus!');
+                if (confirm('Apakah Anda yakin ingin menghapus semua Data Belanja ini?')) {
+                    remove(transactionRef).then(() => {
+                        alert('Data Belanja berhasil dihapus!');
                         window.location.href = 'home.html';
                     }).catch((error) => {
                         console.error('Error:', error);
                     });
+                }
+            });
+
+            // Referensi elemen input dan tombol cari
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+
+            // Fungsi pencarian
+            function searchTransaction() {
+                const searchTerm = searchInput.value.trim().toLowerCase(); // Ambil nilai input dan ubah ke huruf kecil
+                if (!searchTerm) {
+                    alert('Masukkan kode belanja untuk mencari!');
+                    return;
+                }
+
+                const transactionRef = query(ref(database, 'transactions'), orderByChild('kodeBelanja'));
+                onValue(transactionRef, (snapshot) => {
+                    tableTransactionsBody.innerHTML = ''; // Bersihkan data yang ada
+
+                    if (!snapshot.exists()) {
+                        tableTransactionsBody.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada data belanja yang ditemukan</td></tr>';
+                        return;
+                    }
+
+                    let found = false; // Flag untuk menandai apakah data ditemukan
+
+                    snapshot.forEach((childSnapshot) => {
+                        const transaction = { id: childSnapshot.key, ...childSnapshot.val() };
+
+                        // Cocokkan kode belanja dengan input pencarian
+                        if (transaction.kodeBelanja && transaction.kodeBelanja.toLowerCase() === searchTerm) {
+                            found = true;
+
+                            const clone = document.importNode(template, true);
+
+                            // Isi template dengan data transaksi
+                            clone.querySelector('.row-codeTransaction').textContent = transaction.kodeBelanja;
+
+                            // Isi data lainnya
+                            clone.querySelector('.delete-link').href = `hapus.html?id=${transaction.id}`;
+
+                            // Tambahkan baris yang sudah diisi ke dalam table body
+                            tableTransactionsBody.appendChild(clone);
+                        }
+                    });
+
+                    // Jika tidak ada hasil ditemukan
+                    if (!found) {
+                        tableTransactionsBody.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada data belanja yang cocok</td></tr>';
+                    }
+                });
+            }
+
+            // Event listener untuk tombol cari
+            searchBtn.addEventListener('click', searchTransaction);
+
+            // Fungsi untuk reset pencarian
+            searchInput.addEventListener('input', function () {
+                if (!searchInput.value.trim()) {
+                    loadData(); // Kembali ke semua data jika input kosong
                 }
             });
 

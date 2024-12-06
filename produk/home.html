@@ -37,10 +37,10 @@
                             <a class="nav-link" href="../kategori/home.html">Kategori</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Transaksi</a>
+                            <a class="nav-link" href="../transaksi/home.html">Belanja</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Laporan</a>
+                            <a class="nav-link" href="../laporan/home.html">Laporan</a>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
@@ -117,6 +117,9 @@
                             </template>
                         </div>
                     </div>
+
+                    <div id="pagination" class="mt-3 d-flex justify-content-center"></div>
+
                 </div>
             </div>
         </div>
@@ -149,38 +152,72 @@
             const app = initializeApp(firebaseConfig);
             const database = getDatabase(app);
 
+            const itemsPerPage = 5; // Jumlah item per halaman
+            let currentPage = 1; // Halaman saat ini
+            let totalPages = 1; // Total halaman
+
+            function renderPagination(totalItems) {
+                const pagination = document.getElementById('pagination');
+                pagination.innerHTML = ''; // Bersihkan navigasi lama
+                totalPages = Math.ceil(totalItems / itemsPerPage); // Hitung total halaman
+
+                // Tampilkan navigasi hanya jika lebih dari 1 halaman
+                if (totalPages > 1) {
+                    for (let i = 1; i <= totalPages; i++) {
+                        const button = document.createElement('button');
+                        button.className = `btn btn-sm ${i === currentPage ? 'btn-primary' : 'btn-outline-primary'} mx-1`;
+                        button.textContent = i;
+                        button.addEventListener('click', () => {
+                            currentPage = i; // Set halaman saat ini
+                            loadData(); // Muat ulang data
+                        });
+                        pagination.appendChild(button);
+                    }
+                }
+            }
+
             const tableProductBody = document.getElementById('tableProductBody');
             const template = document.getElementById('product-template').content;
 
             function loadData() {
-                // Gunakan orderByChild untuk mengurutkan data berdasarkan abjad (produk)
                 const productRef = query(ref(database, 'products'), orderByChild('produk'));
 
                 onValue(productRef, (snapshot) => {
-                    tableProductBody.innerHTML = ''; // Bersihkan data yang ada
+                    tableProductBody.innerHTML = ''; // Bersihkan data lama
 
                     if (!snapshot.exists()) {
-                        // Jika tidak ada data yang tersedia
-                        tableProductBody.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada produk yang tersedia</td></tr>';
+                        tableProductBody.innerHTML = '<tr><td colspan="5" class="text-center">Tidak ada produk yang tersedia</td></tr>';
                         return;
                     }
 
+                    const products = [];
                     snapshot.forEach((childSnapshot) => {
-                        const product = childSnapshot.val();
-                        const clone = document.importNode(template, true);
+                        const product = { id: childSnapshot.key, ...childSnapshot.val() };
+                        products.push(product); // Tambahkan data ke array
+                    });
 
-                        // Validasi data produk, pastikan semua data yang dibutuhkan ada
+                    const totalItems = products.length; // Total produk
+                    renderPagination(totalItems); // Render navigasi pagination
+
+                    // Ambil data sesuai halaman saat ini
+                    const startIndex = (currentPage - 1) * itemsPerPage;
+                    const endIndex = startIndex + itemsPerPage;
+                    const paginatedProducts = products.slice(startIndex, endIndex);
+
+                    // Tampilkan data ke tabel
+                    paginatedProducts.forEach((product) => {
+                        const clone = document.importNode(template, true);
                         const productName = product.produk || 'Nama produk tidak tersedia';
                         const productPrice = product.harga || 'Harga tidak tersedia';
                         const productCategory = product.kategori || 'Kategori tidak tersedia';
                         const productStatus = product.status || 'Status tidak tersedia';
 
-                        // Isi template dengan data produk
                         clone.querySelector('.row-product').textContent = productName;
-                        clone.querySelector('.row-price').textContent = productPrice;
+                        clone.querySelector('.row-price').textContent = productPrice
+                            ? Number(productPrice).toLocaleString('id-ID')
+                            : '0';
                         clone.querySelector('.row-categorie').textContent = productCategory;
 
-                        // Kondisi untuk menentukan status dan class badge
                         const statusElement = clone.querySelector('.row-status');
                         if (productStatus === 'Ada') {
                             statusElement.innerHTML = '<span class="badge rounded-pill text-bg-primary px-3">Ada</span>';
@@ -190,16 +227,13 @@
                             statusElement.innerHTML = `<span class="badge rounded-pill text-bg-secondary px-3">${productStatus}</span>`;
                         }
 
-                        // Tambahkan event untuk edit dan delete link
-                        clone.querySelector('.edit-link').href = `edit.html?id=${childSnapshot.key}`;
-                        clone.querySelector('.delete-link').href = `hapus.html?id=${childSnapshot.key}`;
+                        clone.querySelector('.edit-link').href = `edit.html?id=${product.id}`;
+                        clone.querySelector('.delete-link').href = `hapus.html?id=${product.id}`;
 
-                        // Tambahkan baris yang sudah diisi ke dalam table body
                         tableProductBody.appendChild(clone);
                     });
                 });
             }
-
 
             // Panggil fungsi loadData untuk menampilkan produk
             loadData();
