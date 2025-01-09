@@ -1,0 +1,11 @@
+# Aktifkan mod_rewrite
+RewriteEngine On
+
+# Aturan untuk menghapus ekstensi .html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-zA-Z0-9/_-]+)$ $1.html [L,QSA]
+
+# Redirect untuk URL dengan .html ke tanpa ekstensi
+RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
+RewriteRule ^ /%1 [L,R=301]
